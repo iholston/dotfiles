@@ -20,19 +20,19 @@ Return
 
 #IfWinExist ahk_class MozillaWindowClass
 ^1::
-    WinGet, MinMax, MinMax, ahk_class MozillaWindowClass
-    if (MinMax = -1)
-    {
-        WinRestore, ahk_class MozillaWindowClass
-        WinMaximize, ahk_class MozillaWindowClass
-    }
-    else if WinActive("ahk_class MozillaWindowClass")
+    WinGet, winState, MinMax, ahk_class MozillaWindowClass
+    if WinActive("ahk_class MozillaWindowClass")
     {
         WinMinimize, ahk_class MozillaWindowClass
     }
-    else
+    else if (winState = -1) ; -1 Min, 1 Maxed
     {
-        WinActivate, ahk_class MozillWindowClass
+        WinRestore, ahk_class MozillaWindowClass
+        WinMaximize, ahk_class MozillaWindowClass    
+    }
+    else 
+    {
+	WinActivate, ahk_class MozillaWindowClass
     }
 Return
 
@@ -58,22 +58,19 @@ Return
 
 #IfWinExist ahk_class org.wezfurlong.wezterm
 ^2::
-    WinGet, MinMax, MinMax, ahk_class org.wezfurlong.wezterm
-    if (MinMax = -1)
+    WinGet, winState, MinMax, ahk_class org.wezfurlong.wezterm
+    if WinActive("ahk_class org.wezfurlong.wezterm")
+    {
+        WinMinimize, ahk_class org.wezfurlong.wezterm
+    }
+    else if (winState = -1) ; -1 Min, 1 Maxed
     {
         WinRestore, ahk_class org.wezfurlong.wezterm
         WinMaximize, ahk_class org.wezfurlong.wezterm
     }
     else 
     {
-        IfWinActive, ahk_class org.wezfurlong.wezterm
-        {
-            WinMinimize, ahk_class org.wezfurlong.wezterm
-        }
-        else
-        {
-            WinActivate, ahk_class org.wezfulong.wezterm
-        }
+	WinActivate, ahk_class org.wezfurlong.wezterm
     }
 Return
 
