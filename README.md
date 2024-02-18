@@ -1,2 +1,2 @@
 # dotfiles
-iholston's Dotfiles for Windows and Neovim
+Personal Dotfiles for Windows and Neovim
