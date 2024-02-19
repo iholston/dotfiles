@@ -33,7 +33,7 @@ function toggle_ahk { # Some steam games don't run if ahk is running
         $ahk | Stop-Process -Force
         Write-Output "ahk terminated"
     } else {
-        keybinds.ahk # its on path
+        & "$env:USERPROFILE\OneDrive\Programming\github\dotfiles\scripts\win-keys.ahk"
         Write-Output "ahk started"
     }
 }

@@ -20,14 +20,8 @@ tasks = {
     # neovim
     '~/.config/nvim': 'nvim',
 
-    # git
-    '~/.gitignore': 'git/gitignore',
-
     # wezterm
     '~/.config/wezterm': 'wezterm',
-
-    # misc
-    '~/.ideavimrc': 'misc/ideavimrc'
 }
 
 print("Creating symbolic links")

@@ -32,7 +32,7 @@ Return
     }
     else 
     {
-	WinActivate, ahk_class MozillaWindowClass
+        WinActivate, ahk_class MozillaWindowClass
     }
 Return
 
@@ -63,18 +63,43 @@ Return
     {
         WinMinimize, ahk_class org.wezfurlong.wezterm
     }
-    else if (winState = -1) ; -1 Min, 1 Maxed
+    else if (winState = -1) 
     {
         WinRestore, ahk_class org.wezfurlong.wezterm
         WinMaximize, ahk_class org.wezfurlong.wezterm
     }
     else 
     {
-	WinActivate, ahk_class org.wezfurlong.wezterm
+        WinActivate, ahk_class org.wezfurlong.wezterm
     }
 Return
 
-; Autoclicker(s)
+; Discord
+#If !WinExist("ahk_exe Discord.exe")
+^3::
+    Run, "C:\Users\Jarvis\AppData\Local\Discord\Update.exe" --processStart Discord.exe
+    WinWait, ahk_class Discord.exe,, 5
+    If WinNotActive, ahk_class Discord.exe
+    {
+        WinActivate, ahk_class Discord.exe
+    }
+Return
+
+#If WinExist("ahk_exe Discord.exe")
+^3::
+    WinGet, activeID, ID, A
+    WinGet, processName, ProcessName, ahk_id %activeID%
+    if (processName == "Discord.exe")
+    {
+        WinMinimize, ahk_exe Discord.exe
+    }
+    else 
+    {
+        WinActivate, ahk_exe Discord.exe
+    }
+Return
+
+; Hold down click
 ^8::
     if (getkeystate("LButton")) {
         click, up
@@ -83,5 +108,37 @@ Return
     }
 Return    
 
-^9::
+; Autoclicker
+global ClickState := false
+^9:: 
+    if (ClickState) 
+    {
+        SetTimer, SendClick, off
+        ClickState := false
+        MsgBox, AutoClicker Off
+        Return
+    }
+
+    InputBox, millis, AutoClicker, Enter time in milliseconds:,, 200, 100
+    if (ErrorLevel || millis + 0 != millis)
+    {
+        MsgBox, No interval set. Exiting
+        Return
+    }
+
+    ClickState := true
+    SetTimer, SendClick, %millis%
+
+    SendClick:
+        Click
+        Return
+Return
+
+; Close all Riot Games
+^0::
+    processList := ["RiotClientCrashHandler.exe", "RiotClientUx.exe", "RiotClientServices.exe", "VALORANT.exe", "VALORANT-Win64-Shipping.exe", "LeagueClient.exe", "League of Legends.exe" ] 
+    for index, processName in processList
+    {
+        Process, Close, %processName%
+    }
 Return
