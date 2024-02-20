@@ -1,10 +1,16 @@
 local wezterm = require("wezterm")
 local act = wezterm.action
+local mux = wezterm.mux
 
 local config = {}
 if wezterm.config_builder then
 	config = wezterm.config_builder()
 end
+
+wezterm.on("gui-startup", function(cmd)
+    local tab, pane, window = mux.spawn_window(cmd or {})
+    window:gui_window():maximize()
+end)
 
 -- Settings
 config.color_scheme = "OneHalfDark"
