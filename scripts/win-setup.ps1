@@ -7,6 +7,7 @@ $apps = @(
     "JanDeDobbeleer.OhMyPosh"
     "BurntSushi.ripgrep.MSVC"
     "AutoHotkey.AutoHotkey"
+    "Clement.bottom"
 )
 
 foreach ($app in $apps) {
