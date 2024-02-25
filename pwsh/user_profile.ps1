@@ -11,7 +11,6 @@ Set-PsFzfOption -PSReadLineChordProvider 'Ctrl+f' -PSReadLineChordReverseHistory
 # PSReadline
 Set-PSReadLineOption -PredictionSource History
 Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
-# Set-PSReadLineKeyHandler -Key Tab -Function AcceptSuggestion
 
 # Alias
 Set-Alias grep findstr
