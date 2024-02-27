@@ -20,6 +20,9 @@ vim.keymap.set("n", "N", "Nzzzv")
 -- Fast terminal 
 vim.keymap.set("n", "<leader>t", ":vsp<CR>:term<CR>:startinsert<CR>", silent)
 
+-- Netrw
+vim.keymap.set("n", "<leader>n", ":Ex<CR>", silent)
+
 -- Using <C-hjkl> to navigate panes
 vim.keymap.set("n", "<C-h>", ":wincmd h<CR>")
 vim.keymap.set("n", "<C-j>", ":wincmd j<CR>")
@@ -38,3 +41,5 @@ vim.keymap.set("n", "<S-TAB>", ":bp<CR>", silent)
 for i = 1, 9 do
     vim.keymap.set("n", "<leader>" .. i, ":buffer " .. i .. "<CR>", silent)
 end
+
+
