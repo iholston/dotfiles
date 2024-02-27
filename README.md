@@ -44,7 +44,7 @@ Config/Keys:
 - I mostly followed [@cpow](https://github.com/cpow)'s series [here](https://www.youtube.com/playlist?list=PLsz00TDipIffreIaUNk64KxTIkQaGguqn)
 - `LDR` = `Space`
 
-## Misc
+## Scripts
 ### AutoHotKey
 
 > perfect for Windows hotkeys
