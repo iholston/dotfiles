@@ -33,6 +33,7 @@ vim.keymap.set("t", "<C-j>", "<C-\\><C-n><C-w>j")
 vim.keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>k")
 vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l")
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
+vim.keymap.set("i", "jk", "<ESC>")
 
 -- Quick buffer nav
 vim.keymap.set("n", "<leader><leader>", "<C-^>", silent)

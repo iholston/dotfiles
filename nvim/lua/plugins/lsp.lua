@@ -13,12 +13,29 @@ return {
         config = function()
             require("mason-lspconfig").setup({
                 ensure_installed = {
+                    -- LSPs
                     "lua_ls",
                     "rust_analyzer",
                     "pylsp",
                     "powershell_es",
                     "jdtls",
                 }
+            })
+        end
+    },
+
+    -- Mason-Null-Ls
+    {
+        "jay-babu/mason-null-ls.nvim",
+        config = function()
+            require("mason-null-ls").setup({
+                ensure_installed = {
+                    "stylua",
+                    "isort",
+                    "black",
+                },
+                automatic_installation  = false,
+                handlers = {},
             })
         end
     },
@@ -37,21 +54,27 @@ return {
                 vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, {})
                 vim.keymap.set('n', 'K', vim.lsp.buf.hover, {})
             end
+            local capabilities = require("cmp_nvim_lsp").default_capabilities()
             require('lspconfig').lua_ls.setup {
                 on_attach = on_attach,
+                capabilities = capabilities,
                 settings = { Lua = { diagnostics = { globals = { 'vim' } } } }
             }
             require('lspconfig').pylsp.setup {
                 on_attach = on_attach,
+                capabilities = capabilities,
             }
             require('lspconfig').rust_analyzer.setup {
                 on_attach = on_attach,
+                capabilities = capabilities,
             }
             require('lspconfig').powershell_es.setup {
                 on_attach = on_attach,
+                capabilities = capabilities,
             }
             require('lspconfig').jdtls.setup {
                 on_attach = on_attach,
+                capabilities = capabilities,
             }
         end
     },
