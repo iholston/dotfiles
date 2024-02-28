@@ -32,6 +32,7 @@ Config:
 - [Oh-my-posh](https://ohmyposh.dev/)
 - [Terminal-Icons](https://github.com/devblackops/Terminal-Icons)
 - [PSFzf](https://github.com/kelleyma49/PSFzf)
+- [LazyGit](https://github.com/jesseduffield/lazygit)
 - OneHalfDark Theme
 - Misc utility funcs
 
