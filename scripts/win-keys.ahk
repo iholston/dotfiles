@@ -99,6 +99,31 @@ Return
     }
 Return
 
+; Obsidian
+#If !WinExist("ahk_exe Obsidian.exe")
+^4::
+    Run, "C:\Users\Jarvis\AppData\Local\Obsidian\Obsidian.exe"
+    WinWait, ahk_class Obsidian.exe,, 5
+    If WinNotActive, ahk_class Obsidian.exe
+    {
+        WinActivate, ahk_class Obsidian.exe
+    }
+Return
+
+#If WinExist("ahk_exe Obsidian.exe")
+^4::
+    WinGet, activeID, ID, A
+    WinGet, processName, ProcessName, ahk_id %activeID%
+    if (processName == "Obsidian.exe")
+    {
+        WinMinimize, ahk_exe Obsidian.exe
+    }
+    else 
+    {
+        WinActivate, ahk_exe Obsidian.exe
+    }
+Return
+
 ; Hold down click
 ^8::
     if (getkeystate("LButton")) {

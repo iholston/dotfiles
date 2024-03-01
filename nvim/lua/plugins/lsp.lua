@@ -4,7 +4,7 @@ return {
         "williamboman/mason.nvim",
         config = function()
             require("mason").setup()
-        end
+        end,
     },
 
     -- Mason-LspConfig
@@ -19,9 +19,9 @@ return {
                     "pylsp",
                     "powershell_es",
                     "jdtls",
-                }
+                },
             })
-        end
+        end,
     },
 
     -- Mason-Null-Ls
@@ -34,10 +34,10 @@ return {
                     "isort",
                     "black",
                 },
-                automatic_installation  = false,
+                automatic_installation = false,
                 handlers = {},
             })
-        end
+        end,
     },
 
     -- Null-ls
@@ -59,39 +59,40 @@ return {
     -- Nvim-LspConfig
     {
         "neovim/nvim-lspconfig",
-        event = { 'BufReadPre', 'BufNewFile' },
+        event = { "BufReadPre", "BufNewFile" },
         config = function()
             local on_attach = function(_, _)
-                vim.keymap.set({'n', 'v'}, '<leader>rn', vim.lsp.buf.rename, {})
-                vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, {})
-                vim.keymap.set('n', '<leader>D', '<cmd>Telescope diagnostics bufnr=0<CR>', {})
-                vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, {})
-                vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {})
-                vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, {})
-                vim.keymap.set('n', 'K', vim.lsp.buf.hover, {})
+                vim.keymap.set({ "n", "v" }, "<leader>rn", vim.lsp.buf.rename, {})
+                vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {})
+                vim.keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", {})
+                vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, {})
+                vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
+                vim.keymap.set("n", "gi", vim.lsp.buf.implementation, {})
+                vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
             end
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
-            require('lspconfig').lua_ls.setup {
+            require("lspconfig").lua_ls.setup({
                 on_attach = on_attach,
                 capabilities = capabilities,
-                settings = { Lua = { diagnostics = { globals = { 'vim' } } } }
-            }
-            require('lspconfig').pylsp.setup {
+                settings = { Lua = { diagnostics = { globals = { "vim" } } } },
+            })
+            require("lspconfig").pylsp.setup({
                 on_attach = on_attach,
                 capabilities = capabilities,
-            }
-            require('lspconfig').rust_analyzer.setup {
+            })
+            require("lspconfig").rust_analyzer.setup({
                 on_attach = on_attach,
                 capabilities = capabilities,
-            }
-            require('lspconfig').powershell_es.setup {
+            })
+            require("lspconfig").powershell_es.setup({
                 on_attach = on_attach,
                 capabilities = capabilities,
-            }
-            require('lspconfig').jdtls.setup {
+                bundle_path = vim.fn.stdpath("data") .. "/mason/packages/powershell-editor-services/",
+            })
+            require("lspconfig").jdtls.setup({
                 on_attach = on_attach,
                 capabilities = capabilities,
-            }
-        end
+            })
+        end,
     },
 }

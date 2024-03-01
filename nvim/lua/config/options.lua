@@ -22,6 +22,7 @@ vim.opt.splitbelow     = true
 vim.opt.signcolumn     = "yes"
 vim.opt.scrolloff      = 7
 vim.opt.termguicolors  = true
+vim.opt.conceallevel   = 2
 
 -- Misc
 vim.opt.shell          = "pwsh.exe"
