@@ -26,6 +26,9 @@ function weather() {
 function dotc {
     nvim $env:USERPROFILE\OneDrive\Programming\github\dotfiles
 }
+function notes {
+    nvim $env:USERPROFILE\OneDrive\Documents\"The Remote Store"\
+}
 function toggle_ahk { # Some steam games don't run if ahk is running
     $ahk = Get-Process AutoHotkeyU64 -ErrorAction SilentlyContinue
     if ($ahk) {

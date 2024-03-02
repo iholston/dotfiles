@@ -1,7 +1,10 @@
 -- Leader
 vim.g.mapleader = " "
 
--- Leader Maps
+-- Jk to exit insert  
+vim.keymap.set("i", "jk", "<ESC>")
+
+-- Yank/Paste
 vim.keymap.set("x", "<leader>p", "\"_dP")
 vim.keymap.set("n", "<leader>y", "\"+y")
 vim.keymap.set("v", "<leader>y", "\"+y")
@@ -18,7 +21,7 @@ vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
 -- Fast terminal 
-vim.keymap.set("n", "<leader>t", ":vsp<CR>:term<CR>:startinsert<CR>", silent)
+vim.keymap.set("n", "<leader>t", ":10sp<CR>:term<CR>:startinsert<CR>", silent)
 
 -- Netrw
 vim.keymap.set("n", "<leader>n", ":Ex<CR>", silent)
@@ -34,8 +37,11 @@ vim.keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>k")
 vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l")
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
 
--- jk to exit insert  
-vim.keymap.set("i", "jk", "<ESC>")
+-- Resize panes
+vim.keymap.set("n", "=", [[<cmd>vertical resize +5<cr>]])
+vim.keymap.set("n", "-", [[<cmd>vertical resize -5<cr>]])
+vim.keymap.set("n", "+", [[<cmd>horizontal resize +2<cr>]])
+vim.keymap.set("n", "_", [[<cmd>horizontal resize -2<cr>]])
 
 -- Quick buffer nav
 vim.keymap.set("n", "<leader><leader>", "<C-^>", silent)
