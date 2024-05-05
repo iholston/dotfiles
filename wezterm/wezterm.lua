@@ -13,7 +13,10 @@ wezterm.on("gui-startup", function(cmd)
 end)
 
 -- Settings
-config.color_scheme = "OneHalfDark"
+config.color_scheme = "Dracula (base16)"
+-- config.color_scheme = "catppuccin-macchiato"
+-- config.color_scheme = "Gruvbox dark, soft (base16)"
+-- config.color_scheme = "Tokyo Night Storm"
 config.font = wezterm.font("JetBrains Mono")
 config.window_background_opacity = 0.99
 config.window_decorations = "RESIZE"

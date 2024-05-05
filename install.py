@@ -11,6 +11,16 @@
 print(__doc__)
 
 import os
+import ctypes
+
+# Check if running as admin
+try:
+    is_admin = os.getuid() == 0
+except AttributeError:
+    is_admin = ctypes.windll.shell32.IsUserAnAdmin()
+if not is_admin:
+    print("   Error. Program must be run as administrator.")
+    exit()
 
 # path of target symlink : location of source file in repo
 tasks = {
@@ -19,6 +29,7 @@ tasks = {
 
     # neovim
     '~/.config/nvim': 'nvim',
+    "{}/{}".format(os.getenv('LOCALAPPDATA'), 'nvim'): 'nvim',
 
     # wezterm
     '~/.config/wezterm': 'wezterm',
@@ -34,8 +45,8 @@ for target, source in tasks.items():
     target = os.path.expanduser(target)
     try:
         os.symlink(source, target)
-        print("Successfully created simlink for {}".format(source))
+        print("Successfully created symlink for {}".format(source))
     except FileExistsError:
-        print("File already exists")
+        print("{} already exists".format(source))
     except Exception as e:
         print("Unknown exception: {}".format(e))
