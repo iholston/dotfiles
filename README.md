@@ -1,5 +1,5 @@
 # iholston's dotfiles
-Most of the games I play run only on Windows, so here I am. These are mostly just an amalgam of other peoples dotfiles to make life on Windows actually pretty good. 
+Dotfiles for Windows and Neovim
 
 ## Terminal Emulator
 ### Wezterm
