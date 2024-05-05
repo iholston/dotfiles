@@ -124,6 +124,7 @@ Return
         WinActivate, ahk_exe Obsidian.exe
     }
 Return
+#If
 
 ; Hold down click
 ^8::

@@ -3,16 +3,22 @@ vim.g.mapleader = " "
 
 -- Jk to exit insert  
 vim.keymap.set("i", "jk", "<ESC>")
+vim.keymap.set("t", "jk", "<ESC>")
 
 -- Yank/Paste
 vim.keymap.set("x", "<leader>p", "\"_dP")
 vim.keymap.set("n", "<leader>y", "\"+y")
 vim.keymap.set("v", "<leader>y", "\"+y")
+vim.keymap.set("n", "<leader>yy", "\"+yy")
 vim.keymap.set("n", "<leader>Y", "\"+Y")
 
 -- Allows highlighted text to be moved up/down
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
+-- Reselecting when indenting multiple times    
+vim.keymap.set("v", "<", "<gv")
+vim.keymap.set("v", ">", ">gv")
 
 -- Keep cursor center when paging up/down and searching
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
@@ -38,17 +44,13 @@ vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l")
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
 
 -- Resize panes
-vim.keymap.set("n", "=", [[<cmd>vertical resize +5<cr>]])
-vim.keymap.set("n", "-", [[<cmd>vertical resize -5<cr>]])
-vim.keymap.set("n", "+", [[<cmd>horizontal resize +2<cr>]])
-vim.keymap.set("n", "_", [[<cmd>horizontal resize -2<cr>]])
+vim.keymap.set("n", "<UP>", "<cmd>resize +2<CR>")
+vim.keymap.set("n", "<Down>", "<cmd>resize -2<CR>")
+vim.keymap.set("n", "<Left>", "<cmd>vertical resize +2<CR>")
+vim.keymap.set("n", "<Right>", "<cmd>vertical resize -2<CR>")
 
 -- Quick buffer nav
 vim.keymap.set("n", "<leader><leader>", "<C-^>", silent)
-vim.keymap.set("n", "<TAB>", ":bn<CR>", silent)
-vim.keymap.set("n", "<S-TAB>", ":bp<CR>", silent)
 for i = 1, 9 do
     vim.keymap.set("n", "<leader>" .. i, ":buffer " .. i .. "<CR>", silent)
 end
-
-

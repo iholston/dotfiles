@@ -24,10 +24,7 @@ function weather() {
     Invoke-RestMethod wttr.in/Colorado-Springs?0 
 }
 function dotc {
-    nvim $env:USERPROFILE\OneDrive\Programming\github\dotfiles
-}
-function notes {
-    nvim $env:USERPROFILE\OneDrive\Documents\"The Remote Store"\
+    nvim $env:USERPROFILE\.config\dotfiles
 }
 function toggle_ahk { # Some steam games don't run if ahk is running
     $ahk = Get-Process AutoHotkeyU64 -ErrorAction SilentlyContinue
@@ -35,7 +32,17 @@ function toggle_ahk { # Some steam games don't run if ahk is running
         $ahk | Stop-Process -Force
         Write-Output "ahk terminated"
     } else {
-        & "$env:USERPROFILE\OneDrive\Programming\github\dotfiles\scripts\win-keys.ahk"
+        & "$env:USERPROFILE\.config\dotfiles\scripts\win-keys.ahk"
         Write-Output "ahk started"
     }
+}
+function toggle_acceptor {
+   $acceptor = Get-Process lol-accept -ErrorAction SilentlyContinue
+   if ($acceptor) {
+       $acceptor | Stop-Process -Force
+       Write-Output "lol-accept terminated"
+   } else {
+       & "$env:USERPROFILE\.config\bin\lol-accept.exe"
+       Write-Output "lol-accept started"
+   }
 }

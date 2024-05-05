@@ -22,6 +22,9 @@ tasks = {
 
     # wezterm
     '~/.config/wezterm': 'wezterm',
+
+    # dotfiles location
+    '~/.config/dotfiles': '../dotfiles',
 }
 
 print("Creating symbolic links")

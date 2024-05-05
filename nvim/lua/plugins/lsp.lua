@@ -19,6 +19,7 @@ return {
                     "pylsp",
                     "powershell_es",
                     "jdtls",
+                    "clangd",
                 },
             })
         end,
@@ -90,6 +91,10 @@ return {
                 bundle_path = vim.fn.stdpath("data") .. "/mason/packages/powershell-editor-services/",
             })
             require("lspconfig").jdtls.setup({
+                on_attach = on_attach,
+                capabilities = capabilities,
+            })
+            require("lspconfig").clangd.setup({
                 on_attach = on_attach,
                 capabilities = capabilities,
             })
