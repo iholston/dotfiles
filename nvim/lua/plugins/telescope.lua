@@ -13,7 +13,8 @@ return {
                             ['<C-k>'] = actions.move_selection_previous, -- move to prev result
                             ['<C-j>'] = actions.move_selection_next, -- move to next result
                         }
-                    }
+                    },
+                    path_display={"truncate"},
                 }
             })
             local builtin = require('telescope.builtin')

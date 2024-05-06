@@ -30,7 +30,7 @@ vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("n", "<leader>t", ":10sp<CR>:term<CR>:startinsert<CR>", silent)
 
 -- Netrw
-vim.keymap.set("n", "<leader>n", ":Ex<CR>", silent)
+-- vim.keymap.set("n", "<leader>n", ":Ex<CR>", silent)
 
 -- Using <C-hjkl> to navigate panes
 vim.keymap.set("n", "<C-h>", ":wincmd h<CR>")
