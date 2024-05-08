@@ -23,14 +23,15 @@ if (!([Security.Principal.WindowsPrincipal] `
 # Install Apps
 $apps = @(
     "Microsoft.Powershell"
-    "Neovim.Neovim"
-    "wez.wezterm"
     "python3"
+    "zig.zig"
+    "AutoHotkey.AutoHotkey"
     "Git.Git"
-    "JanDeDobbeleer.OhMyPosh"
+    "wez.wezterm"
+    "Neovim.Neovim"
     "BurntSushi.ripgrep.MSVC"
     "fzf"
-    "AutoHotkey.AutoHotkey"
+    "JanDeDobbeleer.OhMyPosh"
     "Clement.bottom"
     "chocolatey.chocolatey" 
 )
