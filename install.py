@@ -19,7 +19,8 @@ try:
 except AttributeError:
     is_admin = ctypes.windll.shell32.IsUserAnAdmin()
 if not is_admin:
-    print("   Error. Program must be run as administrator.")
+    print("   Error. Program must be run as administrator.\n")
+    input("   Press Enter to exit...")
     exit()
 
 # path of target symlink : location of source file in repo

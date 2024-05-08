@@ -6,14 +6,20 @@ $apps = @(
     "Git.Git"
     "JanDeDobbeleer.OhMyPosh"
     "BurntSushi.ripgrep.MSVC"
+    "fzf"
     "AutoHotkey.AutoHotkey"
     "Clement.bottom"
+    "chocolatey.chocolatey" # to install nerdfonts, remove when nf add winget support
 )
 
 foreach ($app in $apps) {
     Write-Output "Installing $app..."
     winget install --accept-package-agreements --accept-source-agreements $app -s winget
 }
+
+choco install nerd-fonts-jetbrainsmono -y
+
+choco install nerd-fonts-hack -y
 
 Install-Module -Name Terminal-Icons -Repository PSGallery
 
