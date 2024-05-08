@@ -11,9 +11,7 @@
 print(__doc__)
 
 import os
-import sys
 import ctypes
-import subprocess
 
 # Check if running as admin
 try:
@@ -24,12 +22,6 @@ if not is_admin:
     print("   Error. Program must be run as administrator.\n")
     input("   Press Enter to exit...")
     exit()
-
-# Run win-setup.ps1
-cmd = "-ExecutionPolicy Bypass -File "
-cmd = os.path.dirname(os.path.realpath(__file__)) + "/scripts/win-setup.ps1"
-p = subprocess.Popen(["powershell.exe", cmd], stdout=sys.stdout)
-p.communicate()
 
 # Path of target symlink : Location of source file in repo
 tasks = {
