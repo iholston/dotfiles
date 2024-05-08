@@ -1,3 +1,5 @@
+#Requires -RunAsAdministrator
+
 $apps = @(
     "Microsoft.Powershell"
     "Neovim.Neovim"
@@ -9,7 +11,7 @@ $apps = @(
     "fzf"
     "AutoHotkey.AutoHotkey"
     "Clement.bottom"
-    "chocolatey.chocolatey" # to install nerdfonts, remove when nf add winget support
+    "chocolatey.chocolatey" 
 )
 
 foreach ($app in $apps) {
@@ -17,9 +19,8 @@ foreach ($app in $apps) {
     winget install --accept-package-agreements --accept-source-agreements $app -s winget
 }
 
+# NFs can't be installed w/winget atm
 choco install nerd-fonts-jetbrainsmono -y
-
-choco install nerd-fonts-hack -y
 
 Install-Module -Name Terminal-Icons -Repository PSGallery
 
