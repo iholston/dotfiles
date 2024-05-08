@@ -1,5 +1,7 @@
 # iholston's dotfiles
-Dotfiles for Windows and Neovim
+Dotfiles for Windows and Neovim.
+
+To setup, open Powershell as admin and run `.\install.ps1` and then `python symlink.py`
 
 ## Terminal Emulator
 ### Wezterm
