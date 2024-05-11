@@ -3,6 +3,8 @@ Dotfiles for Windows and Neovim.
 
 To setup, open Powershell as admin and run `.\install.ps1` and then `python symlink.py`
 
+Additionally, for uninstalling bloatware. I'd recommend https://github.com/Sycnex/Windows10Debloater and https://github.com/LeDragoX/Win-Debloat-Tools.
+
 ## Terminal Emulator
 ### Wezterm
 
