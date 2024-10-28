@@ -22,33 +22,48 @@ if (!([Security.Principal.WindowsPrincipal] `
 
 # Install Apps
 $apps = @(
+    # Terminal
+    "wez.wezterm" 
+
+    # Shell 
     "Microsoft.Powershell"
-    "python3"
-    "zig.zig"
-    "AutoHotkey.AutoHotkey"
-    "Git.Git"
-    "wez.wezterm"
+    "JanDeDobbeleer.OhMyPosh"
+    "DEVCOM.JetBrainsMonoNerdFont"
+
+    # Text/Code Editor
     "Neovim.Neovim"
     "BurntSushi.ripgrep.MSVC"
+    "zig.zig" 
+
+    # Other
+    "Git.Git"
     "fzf"
-    "JanDeDobbeleer.OhMyPosh"
+    "AutoHotkey.AutoHotkey"
     "Clement.bottom"
-    "chocolatey.chocolatey" 
 )
 
 foreach ($app in $apps) {
     Write-Output "Installing $app"
     winget install --accept-package-agreements --accept-source-agreements $app -s winget
     Write-Host ""
+    Write-Host ""
 }
-
-# NFs can't be installed w/winget atm
-choco install nerd-fonts-jetbrainsmono -y
 
 Install-Module -Name Terminal-Icons -Repository PSGallery
 
+# Create config folders
+New-Item -Path "$HOME\.config" -ItemType Directory
+New-Item -Path "$HOME\.config\wezterm" -ItemType Directory
+New-Item -Path "$HOME\.config\pwsh" -ItemType Directory
+
+# Create symlinks
+New-Item -Path "$HOME\.config\wezterm\wezterm.lua" -ItemType SymbolicLink -Value "$(Get-Location)\wezterm\wezterm.lua"
+New-Item -Path "$HOME\.config\pwsh\user_profile.ps1" -ItemType SymbolicLink -Value "$(Get-Location)\pwsh\user_profile.ps1"
+New-Item -Path "$env:LOCALAPPDATA\nvim" -ItemType SymbolicLink -Value "$(Get-Location)\nvim"
+
+
 # Set user_profile for pwsh
 $pattern = '. $env:USERPROFILE\.config\pwsh\user_profile.ps1'
-if ((Select-String -Path "$PROFILE" -Pattern $([regex]::escape($pattern))) -eq $null) {
+if ($null -eq (Select-String -Path "$PROFILE" -Pattern $([regex]::escape($pattern)))) {
     Add-Content -Path "$PROFILE" -Value $pattern
 }
