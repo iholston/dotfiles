@@ -63,7 +63,7 @@ New-Item -Path "$env:LOCALAPPDATA\nvim" -ItemType SymbolicLink -Value "$(Get-Loc
 
 
 # Set user_profile for pwsh
-$pattern = '. $env:USERPROFILE\.config\pwsh\user_profile.ps1'
+$pattern = '. $env:USERPROFILE\.config\pwsh\profile.ps1'
 if ($null -eq (Select-String -Path "$PROFILE" -Pattern $([regex]::escape($pattern)))) {
     Add-Content -Path "$PROFILE" -Value $pattern
 }
