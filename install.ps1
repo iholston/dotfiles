@@ -20,10 +20,22 @@ if (!([Security.Principal.WindowsPrincipal] `
     Exit
 } 
 
+$ErrorActionPreference = 'Continue'
+
 # Install Apps
 $apps = @(
-    # Terminal
+    # Terminal 
     "wez.wezterm" 
+    "sxyazi.yazi"
+    "Git.Git"
+    "7zip.7zip"
+    "jqlang.jq"
+    "sharkdp.fd"
+    "BurntSushi.ripgrep.MSVC"
+    "junegunn.fzf"
+    "ajeetdsouza.zoxide"
+    "ImageMagick.ImageMagick"
+    
 
     # Shell 
     "Microsoft.Powershell"
@@ -32,12 +44,9 @@ $apps = @(
 
     # Text/Code Editor
     "Neovim.Neovim"
-    "BurntSushi.ripgrep.MSVC"
-    "zig.zig" 
+    "zig.zig" # required for neovim packages
 
     # Other
-    "Git.Git"
-    "fzf"
     "AutoHotkey.AutoHotkey"
     "Clement.bottom"
 )
@@ -52,15 +61,13 @@ foreach ($app in $apps) {
 Install-Module -Name Terminal-Icons -Repository PSGallery
 
 # Create config folders
-New-Item -Path "$HOME\.config" -ItemType Directory
-New-Item -Path "$HOME\.config\wezterm" -ItemType Directory
-New-Item -Path "$HOME\.config\pwsh" -ItemType Directory
+New-Item -Path "$HOME\.config\wezterm" -ItemType Directory -Force
+New-Item -Path "$HOME\.config\pwsh" -ItemType Directory -Force
 
 # Create symlinks
 New-Item -Path "$HOME\.config\wezterm\wezterm.lua" -ItemType SymbolicLink -Value "$(Get-Location)\wezterm\wezterm.lua"
-New-Item -Path "$HOME\.config\pwsh\user_profile.ps1" -ItemType SymbolicLink -Value "$(Get-Location)\pwsh\user_profile.ps1"
+New-Item -Path "$HOME\.config\pwsh\profile.ps1" -ItemType SymbolicLink -Value "$(Get-Location)\pwsh\profile.ps1"
 New-Item -Path "$env:LOCALAPPDATA\nvim" -ItemType SymbolicLink -Value "$(Get-Location)\nvim"
-
 
 # Set user_profile for pwsh
 $pattern = '. $env:USERPROFILE\.config\pwsh\profile.ps1'
