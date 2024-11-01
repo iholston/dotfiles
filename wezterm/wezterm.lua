@@ -29,14 +29,13 @@ config.keys = {
     -- Send C-a when pressed 2x
     { key = "a",          mods = "LEADER|CTRL", action = act.SendKey { key = "a", mods = "CTRL" } },
 
+    -- Copy Mode
     { key = "c",          mods = "LEADER",      action = act.ActivateCopyMode },
-    { key = "phys:Space", mods = "LEADER",      action = act.ActivateCommandPalette },
-    { key = "w",          mods = "LEADER",      action = act.ShowLauncherArgs { flags = "FUZZY|WORKSPACES" } },
 
-    -- Resize pane mode
+    -- Resize Pane Mode
     { key = "r",          mods = "LEADER",      action = act.ActivateKeyTable { name = "resize_pane", one_shot = false } },
 
-    -- Move tab mode
+    -- Move Tab Mode
     { key = "m",          mods = "LEADER",      action = act.ActivateKeyTable { name = "move_tab", one_shot = false } },
 
     -- Pane 
@@ -48,6 +47,24 @@ config.keys = {
     { key = "j",          mods = "LEADER",      action = act.ActivatePaneDirection("Down") },
     { key = "k",          mods = "LEADER",      action = act.ActivatePaneDirection("Up") },
     { key = "l",          mods = "LEADER",      action = act.ActivatePaneDirection("Right") },
+
+    -- Workspaces
+    { key = "w",          mods = "LEADER",      action = act.ShowLauncherArgs { flags = "FUZZY|WORKSPACES" } },
+    { key = "D",          mods = "LEADER",      action = act.SwitchToWorkspace {
+            name = "Dotfiles",
+            spawn = { cwd = wezterm.home_dir .. "/GitHub/dotfiles" },
+        },
+    },
+    { key = "L",          mods = "LEADER",      action = act.SwitchToWorkspace {
+            name = 'LoL Bot',
+            spawn = { cwd = wezterm.home_dir .. "/GitHub/lol-bot" },
+        },
+    },
+    { key = "A",          mods = "LEADER",      action = act.SwitchToWorkspace {
+            name = 'LoL Accept',
+            spawn = { cwd = wezterm.home_dir .. "/GitHub/lol-accept" },
+        },
+    },
 
     -- Tab
     { key = "t",          mods = "LEADER",      action = act.SpawnTab("CurrentPaneDomain") },

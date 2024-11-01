@@ -35,7 +35,6 @@ $apps = @(
     "junegunn.fzf"
     "ajeetdsouza.zoxide"
     "ImageMagick.ImageMagick"
-    
 
     # Shell 
     "Microsoft.Powershell"
@@ -60,17 +59,18 @@ foreach ($app in $apps) {
 
 Install-Module -Name Terminal-Icons -Repository PSGallery
 
-# Create config folders
-New-Item -Path "$HOME\.config\wezterm" -ItemType Directory -Force
-New-Item -Path "$HOME\.config\pwsh" -ItemType Directory -Force
-
 # Create symlinks
-New-Item -Path "$HOME\.config\wezterm\wezterm.lua" -ItemType SymbolicLink -Value "$(Get-Location)\wezterm\wezterm.lua"
-New-Item -Path "$HOME\.config\pwsh\profile.ps1" -ItemType SymbolicLink -Value "$(Get-Location)\pwsh\profile.ps1"
+New-Item -Path "$HOME\.config" -ItemType Directory -Force 
+New-Item -Path "$HOME\.config\wezterm" -ItemType SymbolicLink -Value "$(Get-Location)\wezterm"
+New-Item -Path "$HOME\.config\pwsh" -ItemType SymbolicLink -Value "$(Get-Location)\pwsh"
 New-Item -Path "$env:LOCALAPPDATA\nvim" -ItemType SymbolicLink -Value "$(Get-Location)\nvim"
+New-Item -Path "$env:APPDATA\yazi" -ItemType SymbolicLink -Value "$(Get-Location)\yazi"
 
 # Set user_profile for pwsh
 $pattern = '. $env:USERPROFILE\.config\pwsh\profile.ps1'
 if ($null -eq (Select-String -Path "$PROFILE" -Pattern $([regex]::escape($pattern)))) {
     Add-Content -Path "$PROFILE" -Value $pattern
 }
+
+# Set YAZI_FILE_ONE - https://yazi-rs.github.io/docs/installation#windows 
+$env:YAZI_FILE_ONE = "C:\Program Files\Git\usr\bin\file.exe"

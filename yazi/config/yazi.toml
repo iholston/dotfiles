@@ -1,0 +1,5 @@
+[opener]
+edit = [
+        { run = "nvim %*", desc = "Neovim" },
+        { run = 'notepad "%*"', desc = "Notepad" },
+]
