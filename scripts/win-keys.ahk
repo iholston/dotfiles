@@ -6,166 +6,153 @@
 ;        _-'.-.-.-.-.-. .---.-. .-----------------------------. .-.---. .---.-.-.-.`-_
 ;       :-----------------------------------------------------------------------------:
 ;       `---._.-----------------------------------------------------------------._.---'
-;       AutoHotKey script that enables some simple Windows hotkeys
+;       AutoHotKey script that handles Windows hotkeys
 
-; Firefox 
-#IfWinNotExist ahk_class MozillaWindowClass
-^1::
-    Run, firefox.exe
-    WinWait, ahk_class MozillaWindowClass,, 5
-    IfWinNotActive, ahk_class MozillaWindowClass 
-    {
-        WinActivate, ahk_class MozillaWindowClass
-    }
-Return
+#Requires AutoHotkey v2.0.2
+#SingleInstance Force
 
-#IfWinExist ahk_class MozillaWindowClass
-^1::
-    WinGet, winState, MinMax, ahk_class MozillaWindowClass
-    if WinActive("ahk_class MozillaWindowClass")
-    {
-        WinMinimize, ahk_class MozillaWindowClass
-    }
-    else if (winState = -1) ; -1 Min, 1 Maxed
-    {
-        WinRestore, ahk_class MozillaWindowClass
-        WinMaximize, ahk_class MozillaWindowClass    
-    }
-    else 
-    {
-        WinActivate, ahk_class MozillaWindowClass
-    }
-Return
+Komorebic(cmd) {
+    RunWait(format("komorebic.exe {}", cmd), , "Hide")
+}
 
-#IfWinActive ahk_class MozillaWindowClass
-^j::
-    Send {Down}
-Return
+; Open Apps
+!f:: {
+    if !WinExist("ahk_exe firefox.exe") {
+        Run("firefox.exe")
+    }
+}
 
-^k::
-    Send {Up}
-Return
+!w:: {
+    if !WinExist("ahk_exe wezterm-gui.exe") {
+        Run("C:\Program Files\WezTerm\wezterm-gui.exe")
+    }
+}
 
-; Wezterm
-#IfWinNotExist ahk_class org.wezfurlong.wezterm
-^2::
-    Run, "C:\Program Files\WezTerm\wezterm-gui.exe"
-    WinWait, ahk_class org.wezfurlong.wezterm,, 5
-    If WinNotActive, ahk_class org.wezfurlong.wezterm
-    {
-        WinActivate, ahk_class org.wezfurlong.wezterm
+!d:: {
+    if !WinExist("ahk_exe Discord.exe") {
+        Run("C:\Users\Jarvis\AppData\Local\Discord\Update.exe --processStart Discord.exe")
     }
-Return
+}
+    
+; Komorebi
+!q::Komorebic("close")
+!m::Komorebic("minimize")
 
-#IfWinExist ahk_class org.wezfurlong.wezterm
-^2::
-    WinGet, winState, MinMax, ahk_class org.wezfurlong.wezterm
-    if WinActive("ahk_class org.wezfurlong.wezterm")
-    {
-        WinMinimize, ahk_class org.wezfurlong.wezterm
-    }
-    else if (winState = -1) 
-    {
-        WinRestore, ahk_class org.wezfurlong.wezterm
-        WinMaximize, ahk_class org.wezfurlong.wezterm
-    }
-    else 
-    {
-        WinActivate, ahk_class org.wezfurlong.wezterm
-    }
-Return
+; Focus windows
+!h::Komorebic("focus left")
+!j::Komorebic("focus down")
+!k::Komorebic("focus up")
+!l::Komorebic("focus right")
 
-; Discord
-#If !WinExist("ahk_exe Discord.exe")
-^3::
-    Run, "C:\Users\Jarvis\AppData\Local\Discord\Update.exe" --processStart Discord.exe
-    WinWait, ahk_class Discord.exe,, 5
-    If WinNotActive, ahk_class Discord.exe
-    {
-        WinActivate, ahk_class Discord.exe
-    }
-Return
+!+[::Komorebic("cycle-focus previous")
+!+]::Komorebic("cycle-focus next")
 
-#If WinExist("ahk_exe Discord.exe")
-^3::
-    WinGet, activeID, ID, A
-    WinGet, processName, ProcessName, ahk_id %activeID%
-    if (processName == "Discord.exe")
-    {
-        WinMinimize, ahk_exe Discord.exe
-    }
-    else 
-    {
-        WinActivate, ahk_exe Discord.exe
-    }
-Return
+; Move windows
+!+h::Komorebic("move left")
+!+j::Komorebic("move down")
+!+k::Komorebic("move up")
+!+l::Komorebic("move right")
 
-; Obsidian
-#If !WinExist("ahk_exe Obsidian.exe")
-^4::
-    Run, "C:\Users\Jarvis\AppData\Local\Obsidian\Obsidian.exe"
-    WinWait, ahk_class Obsidian.exe,, 5
-    If WinNotActive, ahk_class Obsidian.exe
-    {
-        WinActivate, ahk_class Obsidian.exe
-    }
-Return
+; Stack windows
+!Left::Komorebic("stack left")
+!Down::Komorebic("stack down")
+!Up::Komorebic("stack up")
+!Right::Komorebic("stack right")
+!;::Komorebic("unstack")
+![::Komorebic("cycle-stack previous")
+!]::Komorebic("cycle-stack next")
 
-#If WinExist("ahk_exe Obsidian.exe")
-^4::
-    WinGet, activeID, ID, A
-    WinGet, processName, ProcessName, ahk_id %activeID%
-    if (processName == "Obsidian.exe")
-    {
-        WinMinimize, ahk_exe Obsidian.exe
-    }
-    else 
-    {
-        WinActivate, ahk_exe Obsidian.exe
-    }
-Return
-#If
+; Resize
+!=::Komorebic("resize-axis horizontal increase")
+!-::Komorebic("resize-axis horizontal decrease")
+!+=::Komorebic("resize-axis vertical increase")
+!+_::Komorebic("resize-axis vertical decrease")
+
+; Manipulate windows
+!t::Komorebic("toggle-float")
+!n::Komorebic("toggle-monocle")
+
+; Window manager options
+!+r::Komorebic("retile")
+!p::Komorebic("toggle-pause")
+
+; Layouts
+!x::Komorebic("flip-layout horizontal")
+!y::Komorebic("flip-layout vertical")
+
+; Workspaces
+!1::Komorebic("focus-workspace 0")
+!2::Komorebic("focus-workspace 1")
+!3::Komorebic("focus-workspace 2")
+!4::Komorebic("focus-workspace 3")
+!5::Komorebic("focus-workspace 4")
+!6::Komorebic("focus-workspace 5")
+!7::Komorebic("focus-workspace 6")
+!8::Komorebic("focus-workspace 7")
+
+; Move windows across workspaces
+!+1::Komorebic("move-to-workspace 0")
+!+2::Komorebic("move-to-workspace 1")
+!+3::Komorebic("move-to-workspace 2")
+!+4::Komorebic("move-to-workspace 3")
+!+5::Komorebic("move-to-workspace 4")
+!+6::Komorebic("move-to-workspace 5")
+!+7::Komorebic("move-to-workspace 6")
+!+8::Komorebic("move-to-workspace 7")
+
+F1::Komorebic("focus-monitor 1")
+F2::Komorebic("focus-monitor 0")
+
+
+#HotIf WinActive("ahk_class MozillaWindowClass")
+^j:: {
+    Send("{Down}")
+}
+
+^k:: {
+    Send("{Up}")
+}
+#HotIf
 
 ; Hold down click
-^8::
-    if (getkeystate("LButton")) {
-        click, up
+^8:: {
+    if (GetKeyState("LButton")) {
+        Click("up")
     } else {
-        click, down
+        Click("down")
     }
-Return    
+}    
 
 ; Autoclicker
 global ClickState := false
-^9:: 
+^9:: {
     if (ClickState) 
     {
-        SetTimer, SendClick, off
+        SetTimer(SendClick, "off")
         ClickState := false
-        MsgBox, AutoClicker Off
+        MsgBox("AutoClicker Off")
         Return
     }
 
-    InputBox, millis, AutoClicker, Enter time in milliseconds:,, 200, 100
-    if (ErrorLevel || millis + 0 != millis)
+    InputBox(&millis, "AutoClicker", "Enter time in milliseconds:", "w200 h100")
+    if (millis + 0 != millis)
     {
-        MsgBox, No interval set. Exiting
+        MsgBox("No interval set. Exiting")
         Return
     }
 
     ClickState := true
-    SetTimer, SendClick, %millis%
+    SetTimer(SendClick, millis)
 
-    SendClick:
-        Click
-        Return
-Return
+    SendClick() {
+        Click()
+    }
+}
 
 ; Close all Riot Games
-^0::
+^0:: {
     processList := ["RiotClientCrashHandler.exe", "RiotClientUx.exe", "RiotClientServices.exe", "VALORANT.exe", "VALORANT-Win64-Shipping.exe", "LeagueClient.exe", "League of Legends.exe" ] 
-    for index, processName in processList
-    {
-        Process, Close, %processName%
+    for processName in processList {
+        ProcessClose(processName)
     }
-Return
+}

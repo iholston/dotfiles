@@ -20,7 +20,7 @@ if (!([Security.Principal.WindowsPrincipal] `
     Exit
 } 
 
-$ErrorActionPreference = 'Continue'
+$ErrorActionPreference = "Continue"
 
 # Install Apps
 $apps = @(
@@ -46,6 +46,7 @@ $apps = @(
     "zig.zig" # required for neovim packages
 
     # Other
+    "LGUG2Z.komorebi"
     "AutoHotkey.AutoHotkey"
     "Clement.bottom"
 )
@@ -59,12 +60,14 @@ foreach ($app in $apps) {
 
 Install-Module -Name Terminal-Icons -Repository PSGallery
 
-# Create symlinks
-New-Item -Path "$HOME\.config" -ItemType Directory -Force 
-New-Item -Path "$HOME\.config\wezterm" -ItemType SymbolicLink -Value "$(Get-Location)\wezterm"
-New-Item -Path "$HOME\.config\pwsh" -ItemType SymbolicLink -Value "$(Get-Location)\pwsh"
-New-Item -Path "$env:LOCALAPPDATA\nvim" -ItemType SymbolicLink -Value "$(Get-Location)\nvim"
-New-Item -Path "$env:APPDATA\yazi" -ItemType SymbolicLink -Value "$(Get-Location)\yazi"
+# Create .config folder symlink to dotfiles repo
+New-Item -Path "$HOME\.config" -ItemType SymbolicLink -Value "$(Get-Location)" 
+
+# Add app specific environment variables
+[Environment]::SetEnvironmentVariable("YAZI_FILE_ONE", "C:\Program Files\Git\usr\bin\file.exe", [System.EnvironmentVariableTarget]::User) # # https://yazi-rs.github.io/docs/installation#windows 
+[Environment]::SetEnvironmentVariable("YAZI_CONFIG_HOME", "$HOME\.config\yazi", [System.EnvironmentVariableTarget]::User) # https://yazi-rs.github.io/docs/configuration/overview/
+[Environment]::SetEnvironmentVariable("KOMOREBI_CONFIG_HOME", "$HOME\.config\komorebi", [System.EnvironmentVariableTarget]::User) # https://lgug2z.github.io/komorebi/common-workflows/komorebi-config-home.html
+[Environment]::SetEnvironmentVariable("XDG_CONFIG_HOME", "$HOME\.config", [System.EnvironmentVariableTarget]::User) 
 
 # Set user_profile for pwsh
 $pattern = '. $env:USERPROFILE\.config\pwsh\profile.ps1'
@@ -72,5 +75,3 @@ if ($null -eq (Select-String -Path "$PROFILE" -Pattern $([regex]::escape($patter
     Add-Content -Path "$PROFILE" -Value $pattern
 }
 
-# Set YAZI_FILE_ONE - https://yazi-rs.github.io/docs/installation#windows 
-$env:YAZI_FILE_ONE = "C:\Program Files\Git\usr\bin\file.exe"
