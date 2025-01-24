@@ -6,8 +6,8 @@ Some configs and scripts I use to code on Windows.
 - Open Powershell as admin and run `.\install.ps1`
 
 ## Window Management
-- [Komorebi](https://github.com/LGUG2Z/komorebi)
-- Run `komorebic start` and `.\scripts\win-keys.ahk`
+- [GlazeWM](https://github.com/glzr-io/glazewm)
+- Also checkout [Komorebi](https://github.com/LGUG2Z/komorebi)
   
 ## Terminal
 - [Wezterm](https://wezfurlong.org/wezterm/index.html)
@@ -18,3 +18,5 @@ Some configs and scripts I use to code on Windows.
     
 ## Text/Code Editor 
 - [Neovim](https://neovim.io/) - Check out [@cpow](https://github.com/cpow)'s [youtube tutorial](https://www.youtube.com/playlist?list=PLsz00TDipIffreIaUNk64KxTIkQaGguqn)
+and/or [this](https://arslan.io/2023/05/10/the-benefits-of-using-a-single-init-lua-vimrc-file/)
+- [Neovide](https://neovide.dev/)
