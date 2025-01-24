@@ -43,10 +43,10 @@ $apps = @(
 
     # Text/Code Editor
     "Neovim.Neovim"
-    "zig.zig" # required for neovim packages
+    "zig.zig" 
 
     # Other
-    "LGUG2Z.komorebi"
+    "GlazeWM"
     "AutoHotkey.AutoHotkey"
     "Clement.bottom"
 )
@@ -66,7 +66,7 @@ New-Item -Path "$HOME\.config" -ItemType SymbolicLink -Value "$(Get-Location)"
 # Add app specific environment variables
 [Environment]::SetEnvironmentVariable("YAZI_FILE_ONE", "C:\Program Files\Git\usr\bin\file.exe", [System.EnvironmentVariableTarget]::User) # # https://yazi-rs.github.io/docs/installation#windows 
 [Environment]::SetEnvironmentVariable("YAZI_CONFIG_HOME", "$HOME\.config\yazi", [System.EnvironmentVariableTarget]::User) # https://yazi-rs.github.io/docs/configuration/overview/
-[Environment]::SetEnvironmentVariable("KOMOREBI_CONFIG_HOME", "$HOME\.config\komorebi", [System.EnvironmentVariableTarget]::User) # https://lgug2z.github.io/komorebi/common-workflows/komorebi-config-home.html
+[Environment]::SetEnvironmentVariable("GLAZEWM_CONFIG_PATH", "$HOME\.config\glaze\config.yaml", [System.EnvironmentVariableTarget]::User) # https://github.com/glzr-io/glazewm?tab=readme-ov-file#config-documentation
 [Environment]::SetEnvironmentVariable("XDG_CONFIG_HOME", "$HOME\.config", [System.EnvironmentVariableTarget]::User) 
 
 # Set user_profile for pwsh

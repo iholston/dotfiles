@@ -7,17 +7,17 @@ if wezterm.config_builder then
 	config = wezterm.config_builder()
 end
 
-wezterm.on("gui-startup", function(cmd)
-    local tab, pane, window = mux.spawn_window(cmd or {})
-    window:gui_window():maximize()
-end)
+-- wezterm.on("gui-startup", function(cmd)
+--     local tab, pane, window = mux.spawn_window(cmd or {})
+--     window:gui_window():maximize()
+-- end)
 
 -- Settings
 config.color_scheme = "Dracula (base16)"
 config.font = wezterm.font("JetBrains Mono")
 config.window_decorations = "RESIZE"
 config.window_background_opacity = 0.99
-config.window_close_confirmation = "AlwaysPrompt"
+config.window_close_confirmation = "NeverPrompt"
 config.scrollback_lines = 3000
 config.default_workspace = "home"
 config.default_prog = { "C:\\Program Files\\PowerShell\\7\\pwsh.exe" }

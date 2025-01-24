@@ -10,7 +10,7 @@ function which ($command) {
 	  Select-Object -ExpandProperty Path -ErrorAction SilentlyContinue
 }
 
-# Yazi
+# Sets cwd to wherever you are in yazi
 function y {
     $tmp = [System.IO.Path]::GetTempFileName()
     yazi $args --cwd-file="$tmp"
