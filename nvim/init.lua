@@ -1,8 +1,8 @@
 -- based on https://arslan.io/2023/05/10/the-benefits-of-using-a-single-init-lua-vimrc-file/
 
-----------------
---- SETTINGS ---
-----------------
+--  +----------------------------------------------------------+
+--  |                        Settings                          |
+--  +----------------------------------------------------------+
 
 -- Tab
 vim.opt.tabstop         = 4     -- Number of spaces a TAB creates
@@ -37,28 +37,36 @@ vim.opt.clipboard       = "unnamedplus" -- put yanks/pastes in system clipboard
 vim.opt.confirm         = true  -- Confirm before exiting with unsaved buffer(s)
 
 
-----------------
---- KEYMAPS ----
-----------------
+--  +----------------------------------------------------------+
+--  |                  Custom Key Mappings                     |
+--  +----------------------------------------------------------+
 
--- Leader
+--  Modes
+--   normal_mode = "n",
+--   insert_mode = "i",
+--   visual_mode = "v",
+--   visual_block_mode = "x",
+--   term_mode = "t",
+--   command_mode = "c",
+
+-- Leader Key
 vim.g.mapleader = " "
 
 -- jk to exit insert
 vim.keymap.set("i", "jk", "<ESC>")
 vim.keymap.set("t", "jk", "<ESC>")
 
--- Allows highlighted text to be moved up/down
+-- Allows highlighted text to be moved up/down with J/K
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 -- Copy and Paste
-vim.keymap.set({"n", "x"}, "<leader>aa", "gg<S-v>G") -- Select all
+vim.keymap.set({"n", "x"}, "<leader>aa", "gg<S-v>G") -- space-aa, select all
 vim.keymap.set("x", "p", "\"_dP")                    -- Don"t override clipboard with text being pasted over
-vim.keymap.set("n", "Y", "y$")                       -- Yanking a line should act like D and C
+vim.keymap.set("n", "Y", "y$")                       -- Y yanking a line should act like D and C
 
--- File tree 
-vim.keymap.set("n", "<leader>n", ":NvimTreeToggle<CR>", { noremap = true })
+-- File Explorer, file tree, space-n
+vim.keymap.set("n", "<leader>n", ":NvimTreeToggle<CR>", silent) -- space-n, toggles/opens file explorer
 
 -- Keep cursor center when paging up/down and searching
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
@@ -66,22 +74,22 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
--- Reselecting when indenting multiple times    
+-- Reselecting when indenting multiple times
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
 
--- Fast terminal 
-vim.keymap.set("n", "<leader>t", ":10sp<CR>:term<CR>:startinsert<CR>", silent)
+-- Fast terminal, space-t
+vim.keymap.set("n", "<leader>t", ":10sp<CR>:term<CR>:startinsert<CR>", silent) -- opens a terminal window on the bottom
 
 -- Quickfix List
-vim.keymap.set("n", "<leader>a", "<cmd>copen<CR>")
-vim.keymap.set("n", "<leader>A", "<cmd>cclose<CR>")
-vim.keymap.set("n", "<C-n>", "<cmd>cnext<CR>zz")
-vim.keymap.set("n", "<C-p>", "<cmd>cprev<CR>zz")
+vim.keymap.set("n", "<leader>a", "<cmd>copen<CR>")  -- space-a, open quickfix list
+vim.keymap.set("n", "<leader>A", "<cmd>cclose<CR>") -- space-A, close quickfix list
+vim.keymap.set("n", "<C-n>", "<cmd>cnext<CR>zz")    -- ctrl-n, go to next thing in quickfix list
+vim.keymap.set("n", "<C-p>", "<cmd>cprev<CR>zz")    -- ctrl-p, go to prev thing in quickfix list
 
 -- Fast saving
-vim.keymap.set("n", "<Leader>w", ":write!<CR>")
-vim.keymap.set("n", "<Leader>q", ":q!<CR>", { silent = true })
+vim.keymap.set("n", "<Leader>w", ":write!<CR>") -- space-w, save
+vim.keymap.set("n", "<Leader>q", ":q!<CR>", { silent = true }) -- space-q, quit w/o saving
 
 -- Using <C-hjkl> to navigate panes
 vim.keymap.set("n", "<C-h>", ":wincmd h<CR>")
@@ -95,9 +103,72 @@ vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l")
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
 
 
-----------------
---- PLUGINS ----
-----------------
+--  +----------------------------------------------------------+
+--  |                  Plugin Key Mappings                     |
+--  +----------------------------------------------------------+
+
+-- Harpoon Keymaps
+-- Space + Number keys
+local function setup_harpoon_keymaps()
+     local harpoon = require("harpoon")
+     harpoon:setup()
+     -- Open Harpoon Dialog
+     vim.keymap.set("n", "<leader>`", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
+      
+     -- Quickswap to marks
+     vim.keymap.set("n", "<leader>1", function() harpoon:list():select(1) end)
+     vim.keymap.set("n", "<leader>2", function() harpoon:list():select(2) end)
+     vim.keymap.set("n", "<leader>3", function() harpoon:list():select(3) end)
+     vim.keymap.set("n", "<leader>4", function() harpoon:list():select(4) end)
+     vim.keymap.set("n", "<leader>5", function() harpoon:list():append() end)
+     vim.keymap.set("n", "<leader>6", function() harpoon:list():remove() end)
+  
+     -- Toggle previous & next buffers stored within Harpoon list
+     vim.keymap.set("n", "<leader><Tab>", function() harpoon:list():prev() end)
+     vim.keymap.set("n", "<leader><S-Tab>", function() harpoon:list():next() end)
+end
+
+-- Telescope Keymaps
+-- Space + f
+local function setup_telescope_keymaps()
+    local builtin = require("telescope.builtin")
+    vim.keymap.set("n", "<leader>ff", builtin.find_files, {}) -- Search files in cwd
+    vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})  -- Grep in cwd
+    vim.keymap.set("n", "<leader>fb", builtin.buffers, {})    -- Search through open buffers
+    vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})  -- Search through help 
+    vim.keymap.set("n", "<leader>fs", function()              -- Another grep I actually don't know
+        builtin.grep_string({ search = vim.fn.input("Grep > ") })
+    end)
+end
+
+-- LSP Keymaps - if there is a language server active in the file
+-- g + letter, f2-f4
+vim.api.nvim_create_autocmd('LspAttach', {
+    desc = 'LSP actions',
+    callback = function(event)
+        local opts = {buffer = event.buf}
+        -- Creates popup with info about whats under cursor
+        vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)              
+        -- Goto 
+        vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)        
+        vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)       
+        vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+        vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
+        vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
+        vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
+        -- Rename across project
+        vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+        -- LSP auto format file
+        vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+        -- Show availabe code actions
+        vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+    end,
+})
+
+
+--  +----------------------------------------------------------+
+--  |                         Plugins                          |
+--  +----------------------------------------------------------+
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -177,22 +248,6 @@ require("lazy").setup({
     },
 
     -- file explorer
-    --{
-    --    "nvim-tree/nvim-tree.lua",
-    --    version = "*",
-    --    dependencies = { "nvim-tree/nvim-web-devicons" },
-    --    config = function()
-    --        require("nvim-tree").setup({
-    --            sort_by = "case_sensitive",
-    --            actions = {
-    --                open_file = {
-    --                    quit_on_open = true,
-    --                },
-    --            },
-    --        })
-    --    end,
-    --},
-    -- Floating version
     {
         "nvim-tree/nvim-tree.lua",
         config = function()
@@ -207,7 +262,6 @@ require("lazy").setup({
             vim.api.nvim_set_hl(0, "TelescopeBorder", {bg="#3B4252"})
             local HEIGHT_RATIO = 0.8
             local WIDTH_RATIO = 0.5
-            vim.keymap.set("n", "<leader>n", ":NvimTreeOpen<CR>", silent)
             require("nvim-tree").setup({
                 disable_netrw = true,
                 hijack_netrw = true,
@@ -245,25 +299,13 @@ require("lazy").setup({
         end,
     },
 
-    -- harpoon
+    -- Harpoon
     {
         "ThePrimeagen/harpoon",
         branch = "harpoon2",
         dependencies = { "nvim-lua/plenary.nvim" },
         config = function()
-            local harpoon = require("harpoon")
-            harpoon:setup()
-            vim.keymap.set("n", "<leader>`", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
-            vim.keymap.set("n", "<leader>1", function() harpoon:list():select(1) end)
-            vim.keymap.set("n", "<leader>2", function() harpoon:list():select(2) end)
-            vim.keymap.set("n", "<leader>3", function() harpoon:list():select(3) end)
-            vim.keymap.set("n", "<leader>4", function() harpoon:list():select(4) end)
-            vim.keymap.set("n", "<leader>5", function() harpoon:list():append() end)
-            vim.keymap.set("n", "<leader>6", function() harpoon:list():remove() end)
-
-            -- Toggle previous & next buffers stored within Harpoon list
-            vim.keymap.set("n", "<leader><Tab>", function() harpoon:list():prev() end)
-            vim.keymap.set("n", "<leader><S-Tab>", function() harpoon:list():next() end)
+            setup_harpoon_keymaps()
         end
     },
 
@@ -282,6 +324,7 @@ require("lazy").setup({
                 defaults = {
                     mappings = {
                         i = {
+                            -- The only keymaps not in keymaps section
                             ["<C-k>"] = actions.move_selection_previous, -- move to prev result
                             ["<C-j>"] = actions.move_selection_next, -- move to next result
                         }
@@ -289,19 +332,52 @@ require("lazy").setup({
                     path_display={"truncate"},
                 }
             })
-            local builtin = require("telescope.builtin")
-            vim.keymap.set("n", "<leader>ff", builtin.find_files, {})
-            vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})
-            vim.keymap.set("n", "<leader>fb", builtin.buffers, {})
-            vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})
-            vim.keymap.set("n", "<leader>fs", function()
-                builtin.grep_string({ search = vim.fn.input("Grep > ") })
-            end)
+            setup_telescope_keymaps()
         end
     },
 
-
-    -- LSP Plugins
-
+    -- Plugins required for LSP Setup
+    -- https://lsp-zero.netlify.app/docs/getting-started.html
+    -- https://github.com/VonHeikemen/lsp-zero.nvim#quickstart-for-the-impatient
+    {'neovim/nvim-lspconfig'},
+    {'hrsh7th/cmp-nvim-lsp'},
+    {'hrsh7th/nvim-cmp'}, 
 })
 
+--  +----------------------------------------------------------+
+--  |                       LSP Setup                          |
+--  +----------------------------------------------------------+
+-- https://lsp-zero.netlify.app/docs/getting-started.html
+-- https://github.com/VonHeikemen/lsp-zero.nvim#quickstart-for-the-impatient
+
+-- Add cmp_nvim_lsp capabilities settings to lspconfig
+-- This should be executed before you configure any language server
+local lspconfig_defaults = require('lspconfig').util.default_config
+lspconfig_defaults.capabilities = vim.tbl_deep_extend(
+    'force',
+    lspconfig_defaults.capabilities,
+    require('cmp_nvim_lsp').default_capabilities()
+)
+
+-- You'll find a list of language servers here:
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+-- Drop languages you want here
+require('lspconfig').rust_analyzer.setup{}
+require('lspconfig').pyright.setup{}
+
+-- LSP Keymaps in keymaps section
+
+-- Other, idk
+local cmp = require('cmp')
+cmp.setup({
+    sources = {
+            {name = 'nvim_lsp'},
+    },
+    snippet = {
+        expand = function(args)
+                -- You need Neovim v0.10 to use vim.snippet
+                vim.snippet.expand(args.body)
+        end,
+    },
+    mapping = cmp.mapping.preset.insert({}),
+})
