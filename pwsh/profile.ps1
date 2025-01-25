@@ -10,7 +10,7 @@ function which ($command) {
 	  Select-Object -ExpandProperty Path -ErrorAction SilentlyContinue
 }
 
-# Sets cwd to wherever you are in yazi
+# Upgraded yazi, changes directory to yazi location
 function y {
     $tmp = [System.IO.Path]::GetTempFileName()
     yazi $args --cwd-file="$tmp"
