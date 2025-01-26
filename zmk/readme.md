@@ -5,6 +5,5 @@ Occasionally backing up the ZMK Keymap in case I lose access to the layout edito
 # Loading FW from my.glove80.com to keyboard
 
 1. Hit `Save and Build firmware`. A file with `.uf2` will be downloaded.
-2. Plug first **right** half via USB-C. Hit `magic + e`. Upload the FW to the bootloader disk. It will automatically eject.
-3. Plug **left** half via USB-C. Hit `magic + i`. Upload the FW to the bootloader disk. It will automatically eject.
-4. Done.
+2. Follow instructions (here)[https://docs.moergo.com/glove80-user-guide/customizing-key-layout/#loading-new-zmk-firmware-onto-your-glove80] to upload to board
+3. Done
