@@ -6,18 +6,17 @@
 
 -- Tab
 vim.opt.tabstop         = 4     -- Number of spaces a TAB creates
-vim.opt.softtabstop     = 4     -- Number of characters the cursor moves with <Tab> and <BS> 
-vim.shiftwidth          = 4     -- Number of spaces for auto-indentation, <<, >>, etc.
+vim.opt.shiftwidth      = 4     -- Number of spaces for auto-indentation, <<, >>, etc.
 vim.opt.expandtab       = true  -- Expand tabs into spaces
 vim.opt.autoindent      = true  -- Copy indent from current line when starting a new line
 
 -- Buffer 
 vim.opt.number          = true  -- Show line numbers
 vim.opt.relativenumber  = true  -- Show relative line numbers
-vim.opt.wrap            = false -- Don"t wrap lines
+vim.opt.wrap            = false -- Don't wrap lines
 
 -- Search 
-vim.opt.hlsearch        = false -- Don"t highlight all matches
+vim.opt.hlsearch        = false -- Don't highlight all matches
 vim.opt.incsearch       = true  -- Highlights as you type
 vim.opt.ignorecase      = true  -- Ignores case
 
@@ -62,7 +61,7 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 -- Copy and Paste
 vim.keymap.set({"n", "x"}, "<leader>aa", "gg<S-v>G") -- space-aa, select all
-vim.keymap.set("x", "p", "\"_dP")                    -- Don"t override clipboard with text being pasted over
+vim.keymap.set("x", "p", "\"_dP")                    -- Don't override clipboard with text being pasted over
 vim.keymap.set("n", "Y", "y$")                       -- Y yanking a line should act like D and C
 
 -- File Explorer, file tree, space-n
@@ -106,6 +105,13 @@ vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
 --  +----------------------------------------------------------+
 --  |                  Plugin Key Mappings                     |
 --  +----------------------------------------------------------+
+
+
+-- Leap Keymaps
+-- Space + s
+local function setup_leap_keymaps()
+    vim.keymap.set({"n", "x"}, "<leader>s", "<Plug>(leap)")
+end
 
 -- Harpoon Keymaps
 -- Space + Number keys
@@ -247,6 +253,12 @@ require("lazy").setup({
         end
     },
 
+    -- leap
+    {
+        "ggandor/leap.nvim",
+        config = setup_leap_keymaps()
+    },
+
     -- file explorer
     {
         "nvim-tree/nvim-tree.lua",
@@ -297,6 +309,13 @@ require("lazy").setup({
                 },
             })
         end,
+    },
+
+    -- Markdown
+    {
+        'MeanderingProgrammer/render-markdown.nvim',
+        dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+        opts = {},
     },
 
     -- Harpoon
