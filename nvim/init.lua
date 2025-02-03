@@ -59,10 +59,8 @@ vim.keymap.set("t", "jk", "<ESC>")
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
--- Copy and Paste
-vim.keymap.set({"n", "x"}, "<leader>aa", "gg<S-v>G") -- space-aa, select all
-vim.keymap.set("x", "p", "\"_dP")                    -- Don't override clipboard with text being pasted over
-vim.keymap.set("n", "Y", "y$")                       -- Y yanking a line should act like D and C
+-- Select all
+vim.keymap.set({"n", "x"}, "<leader>a", "gg<S-v>G") 
 
 -- File Explorer, file tree, space-n
 vim.keymap.set("n", "<leader>n", ":NvimTreeToggle<CR>", silent) -- space-n, toggles/opens file explorer
@@ -81,14 +79,20 @@ vim.keymap.set("v", ">", ">gv")
 vim.keymap.set("n", "<leader>t", ":10sp<CR>:term<CR>:startinsert<CR>", silent) -- opens a terminal window on the bottom
 
 -- Quickfix List
-vim.keymap.set("n", "<leader>a", "<cmd>copen<CR>")  -- space-a, open quickfix list
-vim.keymap.set("n", "<leader>A", "<cmd>cclose<CR>") -- space-A, close quickfix list
+vim.keymap.set("n", "<leader>q", -- toggles quickfix list
+    function() 
+        if vim.tbl_isempty(vim.fn.filter(vim.fn.getwininfo(), "v:val.quickfix")) then
+            vim.cmd("copen")
+        else
+            vim.cmd("cclose")
+        end
+    end
+)
 vim.keymap.set("n", "<C-n>", "<cmd>cnext<CR>zz")    -- ctrl-n, go to next thing in quickfix list
 vim.keymap.set("n", "<C-p>", "<cmd>cprev<CR>zz")    -- ctrl-p, go to prev thing in quickfix list
 
 -- Fast saving
 vim.keymap.set("n", "<Leader>w", ":write!<CR>") -- space-w, save
-vim.keymap.set("n", "<Leader>q", ":q!<CR>", { silent = true }) -- space-q, quit w/o saving
 
 -- Using <C-hjkl> to navigate panes
 vim.keymap.set("n", "<C-h>", ":wincmd h<CR>")
@@ -142,9 +146,11 @@ local function setup_telescope_keymaps()
     vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})  -- Grep in cwd
     vim.keymap.set("n", "<leader>fb", builtin.buffers, {})    -- Search through open buffers
     vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})  -- Search through help 
-    vim.keymap.set("n", "<leader>fs", function()              -- Another grep I actually don't know
-        builtin.grep_string({ search = vim.fn.input("Grep > ") })
-    end)
+    vim.keymap.set("n", "<leader>fs",                         -- Search for string under cursor 
+        function()              
+            builtin.grep_string({ search = vim.fn.expand("<cword>") })
+        end
+    )
 end
 
 -- LSP Keymaps - if there is a language server active in the file
