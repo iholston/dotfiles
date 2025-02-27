@@ -21,9 +21,6 @@ config.default_prog = { "C:\\Program Files\\PowerShell\\7\\pwsh.exe" }
 config.leader = { key = "w", mods = "ALT", timeout_milliseconds = 1000 }
 config.keys = {
 
-    -- Send C-a when pressed 2x
-    { key = "a",          mods = "LEADER|CTRL", action = act.SendKey { key = "a", mods = "CTRL" } },
-
     -- Copy Mode
     { key = "c",          mods = "LEADER",      action = act.ActivateCopyMode },
 

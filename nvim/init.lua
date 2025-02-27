@@ -79,7 +79,7 @@ vim.keymap.set("v", ">", ">gv")
 vim.keymap.set("n", "<leader>t", ":10sp<CR>:term<CR>:startinsert<CR>", silent) -- opens a terminal window on the bottom
 
 -- Quickfix List
-vim.keymap.set("n", "<leader>q", -- toggles quickfix list
+vim.keymap.set("n", "<leader>e", -- toggles quickfix list
     function() 
         if vim.tbl_isempty(vim.fn.filter(vim.fn.getwininfo(), "v:val.quickfix")) then
             vim.cmd("copen")
@@ -92,7 +92,8 @@ vim.keymap.set("n", "<C-n>", "<cmd>cnext<CR>zz")    -- ctrl-n, go to next thing 
 vim.keymap.set("n", "<C-p>", "<cmd>cprev<CR>zz")    -- ctrl-p, go to prev thing in quickfix list
 
 -- Fast saving
-vim.keymap.set("n", "<Leader>w", ":write!<CR>") -- space-w, save
+vim.keymap.set("n", "<Leader>w", ":write!<CR>")                 -- space-w, save
+vim.keymap.set("n", "<Leader>q", ":q!<CR>", {silent = true})    -- space-q, quit
 
 -- Using <C-hjkl> to navigate panes
 vim.keymap.set("n", "<C-h>", ":wincmd h<CR>")
@@ -404,5 +405,7 @@ cmp.setup({
                 vim.snippet.expand(args.body)
         end,
     },
-    mapping = cmp.mapping.preset.insert({}),
+    mapping = cmp.mapping.preset.insert({
+        ['<CR>'] = cmp.mapping.confirm({select = false}),
+  }),
 })
