@@ -31,22 +31,14 @@ vim.opt.termguicolors   = true  -- Enables 24-bit RGB color in the TUI
 
 -- Misc
 vim.opt.shell           = "pwsh.exe"
-vim.opt.mouse           = "a"   -- Allows the use of the mouse in all modes
-vim.opt.clipboard       = "unnamedplus" -- put yanks/pastes in system clipboard
+vim.opt.mouse           = "a"  -- Allows the use of the mouse in all modes
+vim.opt.clipboard       = "unnamedplus"  -- put yanks/pastes in system clipboard
 vim.opt.confirm         = true  -- Confirm before exiting with unsaved buffer(s)
 
 
 --  +----------------------------------------------------------+
 --  |                  Custom Key Mappings                     |
 --  +----------------------------------------------------------+
-
---  Modes
---   normal_mode = "n",
---   insert_mode = "i",
---   visual_mode = "v",
---   visual_block_mode = "x",
---   term_mode = "t",
---   command_mode = "c",
 
 -- Leader Key
 vim.g.mapleader = " "
@@ -62,14 +54,14 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 -- Select all
 vim.keymap.set({"n", "x"}, "<leader>a", "gg<S-v>G") 
 
--- File Explorer, file tree, space-n
-vim.keymap.set("n", "<leader>n", ":NvimTreeToggle<CR>", silent) -- space-n, toggles/opens file explorer
-
 -- Keep cursor center when paging up/down and searching
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
+
+-- Toggle Wrap
+vim.keymap.set("n", "<leader>v", ":set linebreak<CR>:set wrap!<CR>")
 
 -- Reselecting when indenting multiple times
 vim.keymap.set("v", "<", "<gv")
@@ -107,80 +99,9 @@ vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l")
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
 
 
---  +----------------------------------------------------------+
---  |                  Plugin Key Mappings                     |
---  +----------------------------------------------------------+
-
-
--- Leap Keymaps
--- Space + s
-local function setup_leap_keymaps()
-    vim.keymap.set({"n", "x"}, "<leader>s", "<Plug>(leap)")
-end
-
--- Harpoon Keymaps
--- Space + Number keys
-local function setup_harpoon_keymaps()
-     local harpoon = require("harpoon")
-     harpoon:setup()
-     -- Open Harpoon Dialog
-     vim.keymap.set("n", "<leader>`", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
-      
-     -- Quickswap to marks
-     vim.keymap.set("n", "<leader>1", function() harpoon:list():select(1) end)
-     vim.keymap.set("n", "<leader>2", function() harpoon:list():select(2) end)
-     vim.keymap.set("n", "<leader>3", function() harpoon:list():select(3) end)
-     vim.keymap.set("n", "<leader>4", function() harpoon:list():select(4) end)
-     vim.keymap.set("n", "<leader>5", function() harpoon:list():append() end)
-     vim.keymap.set("n", "<leader>6", function() harpoon:list():remove() end)
-  
-     -- Toggle previous & next buffers stored within Harpoon list
-     vim.keymap.set("n", "<leader><Tab>", function() harpoon:list():prev() end)
-     vim.keymap.set("n", "<leader><S-Tab>", function() harpoon:list():next() end)
-end
-
--- Telescope Keymaps
--- Space + f
-local function setup_telescope_keymaps()
-    local builtin = require("telescope.builtin")
-    vim.keymap.set("n", "<leader>ff", builtin.find_files, {}) -- Search files in cwd
-    vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})  -- Grep in cwd
-    vim.keymap.set("n", "<leader>fb", builtin.buffers, {})    -- Search through open buffers
-    vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})  -- Search through help 
-    vim.keymap.set("n", "<leader>fs",                         -- Search for string under cursor 
-        function()              
-            builtin.grep_string({ search = vim.fn.expand("<cword>") })
-        end
-    )
-end
-
--- LSP Keymaps - if there is a language server active in the file
--- g + letter, f2-f4
-vim.api.nvim_create_autocmd('LspAttach', {
-    desc = 'LSP actions',
-    callback = function(event)
-        local opts = {buffer = event.buf}
-        -- Creates popup with info about whats under cursor
-        vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)              
-        -- Goto 
-        vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)        
-        vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)       
-        vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-        vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-        vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-        vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-        -- Rename across project
-        vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-        -- LSP auto format file
-        vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-        -- Show availabe code actions
-        vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-    end,
-})
-
 
 --  +----------------------------------------------------------+
---  |                         Plugins                          |
+--  |             Plugins w/o keymaps                          |
 --  +----------------------------------------------------------+
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -215,13 +136,17 @@ require("lazy").setup({
             require("lualine").setup({
                 options = { theme = "gruvbox" },
                 sections = {
+                    -- Don't show insert/normal/etc
+                    lualine_a = {}, 
                     lualine_c = {
                         {
                             "filename",
                             file_status = true, -- displays file status (readonly status, modified status)
-                            path = 2            -- 0 = just filename, 1 = relative path, 2 = absolute path
+                            path = 1            -- 0 = just filename, 1 = relative path, 2 = absolute path
                         }
-                    }
+                    }, 
+                    -- Don't show utf-8, windows symbol, filetype
+                    lualine_x = {},
                 }
             })
        end,
@@ -260,82 +185,77 @@ require("lazy").setup({
         end
     },
 
-    -- leap
-    {
-        "ggandor/leap.nvim",
-        config = setup_leap_keymaps()
-    },
-
-    -- file explorer
-    {
-        "nvim-tree/nvim-tree.lua",
-        config = function()
-            -- https://www.reddit.com/r/neovim/comments/13u9okq/nvimtree_vs_neotree/
-            -- https://github.com/MarioCarrion/videos/blob/269956e913b76e6bb4ed790e4b5d25255cb1db4f/2023/01/nvim/lua/plugins/nvim-tree.lua
-            vim.g.loaded_netrw = 1
-            vim.g.loaded_netrwPlugin = 1
-            -- https://neovim.discourse.group/t/how-to-configure-floating-window-colors-highlighting-in-0-8/3193
-            vim.api.nvim_set_hl(0, "FloatBorder", {bg="#3B4252", fg="#5E81AC"})
-            vim.api.nvim_set_hl(0, "NormalFloat", {bg="#3B4252"})
-            vim.api.nvim_set_hl(0, "TelescopeNormal", {bg="#3B4252"})
-            vim.api.nvim_set_hl(0, "TelescopeBorder", {bg="#3B4252"})
-            local HEIGHT_RATIO = 0.8
-            local WIDTH_RATIO = 0.5
-            require("nvim-tree").setup({
-                disable_netrw = true,
-                hijack_netrw = true,
-                respect_buf_cwd = true,
-                sync_root_with_cwd = true,
-                view = {
-                    relativenumber = true,
-                    float = {
-                        enable = true,
-                        open_win_config = function()
-                            local screen_w = vim.opt.columns:get()
-                            local screen_h = vim.opt.lines:get() - vim.opt.cmdheight:get()
-                            local window_w = screen_w * WIDTH_RATIO
-                            local window_h = screen_h * HEIGHT_RATIO
-                            local window_w_int = math.floor(window_w)
-                            local window_h_int = math.floor(window_h)
-                            local center_x = (screen_w - window_w) / 2
-                            local center_y = ((vim.opt.lines:get() - window_h) / 2)
-                            - vim.opt.cmdheight:get()
-                            return {
-                                border = "rounded",
-                                relative = "editor",
-                                row = center_y,
-                                col = center_x,
-                                width = window_w_int,
-                                height = window_h_int,
-                            }
-                        end,
-                    },
-                    width = function()
-                        return math.floor(vim.opt.columns:get() * WIDTH_RATIO)
-                    end,
-                },
-            })
-        end,
-    },
-
     -- Markdown
     {
         'MeanderingProgrammer/render-markdown.nvim',
+        ft = "markdown",
         dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
         opts = {},
     },
 
-    -- Harpoon
+--  +----------------------------------------------------------+
+--  |               Plugins with keymaps                       |
+--  +----------------------------------------------------------+
+
+    -- leap -> LEADER + s
+    {
+        "ggandor/leap.nvim",
+        config = function()
+            vim.keymap.set({"n", "x"}, "<leader>s", "<Plug>(leap)")
+        end
+    },
+
+    -- file explorer -> LEADER + n
+    {
+        "echasnovski/mini.nvim",
+        version = false,
+        config = function()
+            local mini_files = require("mini.files")
+            mini_files.setup({
+                mappings = { 
+                    go_in_plus = 'l',
+                    go_in = 'L',
+                    go_out_plus = 'h',
+                    go_out = 'H',
+                    trim_left = '>',
+                    trim_right = '<',
+                }, 
+                options = {
+                    permanent_delete = false
+                },
+                --windows = {
+                --    preview = true,
+                --    width_preview = 40,
+                --}
+            })
+            vim.keymap.set("n", "<leader>n", mini_files.open)
+        end
+    },
+
+    -- Harpoon -> LEADER + h
     {
         "ThePrimeagen/harpoon",
         branch = "harpoon2",
         dependencies = { "nvim-lua/plenary.nvim" },
         config = function()
-            setup_harpoon_keymaps()
+             local harpoon = require("harpoon")
+             harpoon:setup()
+             -- Open Harpoon Dialog
+             vim.keymap.set("n", "<leader>h", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
+
+             -- Add/Remove 
+             vim.keymap.set("n", "<leader>ha", function() harpoon:list():add() end)
+             vim.keymap.set("n", "<leader>hd", function() harpoon:list():remove() end)
+
+             -- Quickswap to marks
+             vim.keymap.set("n", "<leader>1", function() harpoon:list():select(1) end)
+             vim.keymap.set("n", "<leader>2", function() harpoon:list():select(2) end)
+             vim.keymap.set("n", "<leader>3", function() harpoon:list():select(3) end)
+             vim.keymap.set("n", "<leader>4", function() harpoon:list():select(4) end)
         end
     },
 
-    -- Telescope
+    -- Telescope -> LEADER + f
     {
         "nvim-telescope/telescope.nvim",
         branch = "0.1.x",
@@ -346,21 +266,37 @@ require("lazy").setup({
         config = function()
             local telescope = require("telescope")
             local actions = require("telescope.actions")
+            local builtin = require("telescope.builtin")
             telescope.setup({
                 defaults = {
                     mappings = {
                         i = {
-                            -- The only keymaps not in keymaps section
                             ["<C-k>"] = actions.move_selection_previous, -- move to prev result
                             ["<C-j>"] = actions.move_selection_next, -- move to next result
+                            ["<M-e>"] = actions.smart_send_to_qflist, -- send entire list or selected to quickfix
                         }
                     },
                     path_display={"truncate"},
                 }
             })
-            setup_telescope_keymaps()
+            vim.keymap.set("n", "<leader>ff", builtin.find_files, {}) -- Search files in cwd
+            vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})  -- Grep in cwd
+            vim.keymap.set("n", "<leader>fb", builtin.buffers, {})    -- Search through open buffers
+            vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})  -- Search through help 
+            vim.keymap.set("n", "<leader>fs",                         -- Search for string under cursor 
+                function()              
+                    builtin.grep_string({ search = vim.fn.expand("<cword>") })
+                end
+            )
         end
     },
+
+
+--  +----------------------------------------------------------+
+--  |                       LSP Setup                          |
+--  +----------------------------------------------------------+
+-- https://lsp-zero.netlify.app/docs/getting-started.html
+-- https://github.com/VonHeikemen/lsp-zero.nvim#quickstart-for-the-impatient
 
     -- Plugins required for LSP Setup
     -- https://lsp-zero.netlify.app/docs/getting-started.html
@@ -370,11 +306,6 @@ require("lazy").setup({
     {'hrsh7th/nvim-cmp'}, 
 })
 
---  +----------------------------------------------------------+
---  |                       LSP Setup                          |
---  +----------------------------------------------------------+
--- https://lsp-zero.netlify.app/docs/getting-started.html
--- https://github.com/VonHeikemen/lsp-zero.nvim#quickstart-for-the-impatient
 
 -- Add cmp_nvim_lsp capabilities settings to lspconfig
 -- This should be executed before you configure any language server
@@ -408,4 +339,28 @@ cmp.setup({
     mapping = cmp.mapping.preset.insert({
         ['<CR>'] = cmp.mapping.confirm({select = false}),
   }),
+})
+
+-- LSP Keymaps - if there is a language server active in the file
+-- g + letter
+vim.api.nvim_create_autocmd('LspAttach', {
+    desc = 'LSP actions',
+    callback = function(event)
+        local opts = {buffer = event.buf}
+        -- Creates popup with info about whats under cursor
+        vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)              
+        -- Goto 
+        vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)        
+        vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)       
+        vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+        vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
+        vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
+        vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
+        -- Rename across project
+        vim.keymap.set('n', 'gR', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+        -- LSP auto format file
+        vim.keymap.set({'n', 'x'}, 'gf', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+        -- Show availabe code actions
+        vim.keymap.set('n', 'ga', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+    end,
 })
