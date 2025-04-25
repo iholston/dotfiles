@@ -1,5 +1,6 @@
 # Terminal Theme 
-oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH/powerlevel10k_lean.omp.json" | Invoke-Expression
+# oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH/powerlevel10k_lean.omp.json" | Invoke-Expression
+oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH/robbyrussell.omp.json" | Invoke-Expression
 
 # Terminal Icons
 Import-Module -Name Terminal-Icons
@@ -31,6 +32,7 @@ function y {
 }
 
 # https://dev.to/kevinnitro/fzf-advanced-integration-in-powershell-53p0#command
+# better fzf for finding files/directories
 function _fzf_open_path
 {
   param (
