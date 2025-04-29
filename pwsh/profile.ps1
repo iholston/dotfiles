@@ -19,6 +19,10 @@ function which ($command) {
 	  Select-Object -ExpandProperty Path -ErrorAction SilentlyContinue
 }
 
+# Clears swap files for neovim
+function clear_swaps {
+    Remove-Item -Path "$env:USERPROFILE\AppData\Local\nvim-data\swap" -Recurse -Force
+}
 
 # Upgraded yazi, changes directory to yazi location
 function y {

@@ -36,4 +36,8 @@ config.keys   = {
     { key = "n",          mods = "LEADER",      action = act.ShowTabNavigator },
 }
 
+config.window_padding = {
+  bottom = 0,
+}
+
 return config

@@ -52,7 +52,7 @@ vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 -- Select all
-vim.keymap.set({"n", "x"}, "<leader>a", "gg<S-v>G") 
+vim.keymap.set({"n", "x"}, "<leader>a", "gg<S-v>G", { desc = "Select All" }) 
 
 -- Keep cursor center when paging up/down and searching
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
@@ -61,31 +61,31 @@ vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
 -- Toggle Wrap
-vim.keymap.set("n", "<leader>v", ":set linebreak<CR>:set wrap!<CR>")
+vim.keymap.set("n", "<leader>v", ":set linebreak<CR>:set wrap!<CR>", { desc = "Toggle Linewrap" })
 
 -- Reselecting when indenting multiple times
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
 
 -- Fast terminal, space-t
-vim.keymap.set("n", "<leader>t", ":10sp<CR>:term<CR>:startinsert<CR>", silent) -- opens a terminal window on the bottom
+vim.keymap.set("n", "<leader>t", ":10sp<CR>:term<CR>:startinsert<CR>", { silent = true, desc = "Terminal" })
 
 -- Quickfix List
-vim.keymap.set("n", "<leader>e", -- toggles quickfix list
+vim.keymap.set("n", "<leader>q", -- toggles quickfix list
     function() 
         if vim.tbl_isempty(vim.fn.filter(vim.fn.getwininfo(), "v:val.quickfix")) then
             vim.cmd("copen")
         else
             vim.cmd("cclose")
         end
-    end
+    end,
+    { desc = "Toggle QuickFixList" }
 )
 vim.keymap.set("n", "<C-n>", "<cmd>cnext<CR>zz")    -- ctrl-n, go to next thing in quickfix list
 vim.keymap.set("n", "<C-p>", "<cmd>cprev<CR>zz")    -- ctrl-p, go to prev thing in quickfix list
 
 -- Fast saving
-vim.keymap.set("n", "<Leader>w", ":write!<CR>")                 -- space-w, save
-vim.keymap.set("n", "<Leader>q", ":q!<CR>", {silent = true})    -- space-q, quit
+vim.keymap.set("n", "<Leader>w", ":write!<CR>", { desc = "Save" })              -- space-w, save
 
 -- Using <C-hjkl> to navigate panes
 vim.keymap.set("n", "<C-h>", ":wincmd h<CR>")
@@ -134,19 +134,22 @@ require("lazy").setup({
         dependencies = { "nvim-tree/nvim-web-devicons" },
         config = function ()
             require("lualine").setup({
-                options = { theme = "gruvbox" },
+                options = { 
+                    theme = "auto",
+                    component_separators = '',
+                    section_separators = ''
+                },
                 sections = {
-                    -- Don't show insert/normal/etc
                     lualine_a = {}, 
+                    lualine_b = { "branch" },
                     lualine_c = {
                         {
                             "filename",
                             file_status = true, -- displays file status (readonly status, modified status)
-                            path = 1            -- 0 = just filename, 1 = relative path, 2 = absolute path
+                            path = 0            -- 0 = just filename, 1 = relative path, 2 = absolute path
                         }
                     }, 
-                    -- Don't show utf-8, windows symbol, filetype
-                    lualine_x = {},
+                    lualine_x = { "diagnostics", "diff" },
                 }
             })
        end,
@@ -185,6 +188,17 @@ require("lazy").setup({
         end
     },
 
+    -- BarBar
+    {'romgrk/barbar.nvim',
+         dependencies = {
+             'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
+             'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+         },
+         init = function() vim.g.barbar_auto_setup = false end,
+         opts = {},
+         version = '^1.0.0', -- optional: only update when a new 1.x version is released
+     },
+
     -- Markdown
     {
         'MeanderingProgrammer/render-markdown.nvim',
@@ -201,8 +215,28 @@ require("lazy").setup({
     {
         "ggandor/leap.nvim",
         config = function()
-            vim.keymap.set({"n", "x"}, "<leader>s", "<Plug>(leap)")
+            vim.keymap.set({"n", "x"}, "<leader>s", "<Plug>(leap)", { desc = "Leap" })
         end
+    },
+    
+    {
+        "folke/which-key.nvim",
+        event = "VeryLazy",
+        opts = {
+            delay = 2000,
+            icons = {
+                mappings = false,
+            },
+        },
+        keys = {
+            {
+                "<leader>?",
+                function()
+                    require("which-key").show({ global = false })
+                end,
+                desc = "Buffer Local Keymaps (which-key)",
+            },
+        },
     },
 
     -- file explorer -> LEADER + n
@@ -228,9 +262,10 @@ require("lazy").setup({
                 --    width_preview = 40,
                 --}
             })
-            vim.keymap.set("n", "<leader>n", mini_files.open)
+            vim.keymap.set("n", "<leader>n", mini_files.open, { desc = "Open File Explorer" })
         end
     },
+    
 
     -- Harpoon -> LEADER + h
     {
@@ -244,14 +279,14 @@ require("lazy").setup({
              vim.keymap.set("n", "<leader>h", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
 
              -- Add/Remove 
-             vim.keymap.set("n", "<leader>ha", function() harpoon:list():add() end)
-             vim.keymap.set("n", "<leader>hd", function() harpoon:list():remove() end)
+             vim.keymap.set("n", "<leader>ha", function() harpoon:list():add() end, { desc = "Harpoon Add"})
+             vim.keymap.set("n", "<leader>hd", function() harpoon:list():remove() end, { desc = "Harpoon Delete"})
 
              -- Quickswap to marks
-             vim.keymap.set("n", "<leader>1", function() harpoon:list():select(1) end)
-             vim.keymap.set("n", "<leader>2", function() harpoon:list():select(2) end)
-             vim.keymap.set("n", "<leader>3", function() harpoon:list():select(3) end)
-             vim.keymap.set("n", "<leader>4", function() harpoon:list():select(4) end)
+             vim.keymap.set("n", "<leader>1", function() harpoon:list():select(1) end, { desc = "Harpoon to File 1" })
+             vim.keymap.set("n", "<leader>2", function() harpoon:list():select(2) end, { desc = "Harpoon to File 2" })
+             vim.keymap.set("n", "<leader>3", function() harpoon:list():select(3) end, { desc = "Harpoon to File 3" })
+             vim.keymap.set("n", "<leader>4", function() harpoon:list():select(4) end, { desc = "Harpoon to File 4" })
         end
     },
 
@@ -273,21 +308,24 @@ require("lazy").setup({
                         i = {
                             ["<C-k>"] = actions.move_selection_previous, -- move to prev result
                             ["<C-j>"] = actions.move_selection_next, -- move to next result
-                            ["<M-e>"] = actions.smart_send_to_qflist, -- send entire list or selected to quickfix
+                            ["<C-q>"] = actions.smart_send_to_qflist, -- send entire list or selected to quickfix
                         }
                     },
-                    path_display={"truncate"},
+                    path_display = function(opts, path)
+                        local tail = require("telescope.utils").path_tail(path)
+                        return string.format("%s - %s", tail, path)
+                    end,
                 }
             })
-            vim.keymap.set("n", "<leader>ff", builtin.find_files, {}) -- Search files in cwd
-            vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})  -- Grep in cwd
-            vim.keymap.set("n", "<leader>fb", builtin.buffers, {})    -- Search through open buffers
-            vim.keymap.set("n", "<leader>fh", builtin.help_tags, {})  -- Search through help 
-            vim.keymap.set("n", "<leader>fs",                         -- Search for string under cursor 
+            vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find files in cwd" })
+            vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Live grep in cwd"})
+            vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Find buffers in cwd" })
+            vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Find through help" })
+            vim.keymap.set("n", "<leader>fs",                       
                 function()              
                     builtin.grep_string({ search = vim.fn.expand("<cword>") })
-                end
-            )
+                end,
+                { desc = "Find string under cursor" })
         end
     },
 
