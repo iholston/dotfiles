@@ -27,7 +27,7 @@ vim.opt.splitright      = true  -- Horizontal splits created below
 -- UI
 vim.opt.signcolumn      = "yes" -- Render signcolumn always to prevent text shifting
 vim.opt.scrolloff       = 7     -- Keep minimum x number of screens lines above and below the cursor
-vim.opt.termguicolors   = true  -- Enables 24-bit RGB color in the TUI
+vim.opt.termguicolors   = true  -- Enables 24-bit RGB color in the TUIvertical
 
 -- Misc
 vim.opt.shell           = "pwsh.exe"
@@ -42,10 +42,6 @@ vim.opt.confirm         = true  -- Confirm before exiting with unsaved buffer(s)
 
 -- Leader Key
 vim.g.mapleader = " "
-
--- jk to exit insert
-vim.keymap.set("i", "jk", "<ESC>")
-vim.keymap.set("t", "jk", "<ESC>")
 
 -- Allows highlighted text to be moved up/down with J/K
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
@@ -62,10 +58,6 @@ vim.keymap.set("n", "N", "Nzzzv")
 
 -- Toggle Wrap
 vim.keymap.set("n", "<leader>v", ":set linebreak<CR>:set wrap!<CR>", { desc = "Toggle Linewrap" })
-
--- Tab to move buffers
-vim.keymap.set("n", "<tab>", ":bnext<CR>", { desc = "Go to next buffer" })
-vim.keymap.set("n", "<S-tab>", ":bprev<CR>", { desc = "Go to prev buffer" })
 
 -- Reselecting when indenting multiple times
 vim.keymap.set("v", "<", "<gv")
@@ -151,14 +143,17 @@ require("lazy").setup({
         'akinsho/toggleterm.nvim', version = "*", 
         config = function()
             vim.opt.shell = vim.fn.executable "pwsh" and "pwsh" or "powershell"
-            vim.opt.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
-            vim.opt.shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait"
-            vim.opt.shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode"
+            vim.opt.shellcmdflag = "-nologo -noprofile -executionpolicy remotesigned -command [console]::inputencoding=[console]::outputencoding=[system.text.encoding]::utf8;"
+            vim.opt.shellredir = "-redirectstandardoutput %s -nonewwindow -wait"
+            vim.opt.shellpipe = "2>&1 | out-file -encoding utf8 %s; exit $lastexitcode"
             vim.opt.shellquote = ""
             vim.opt.shellxquote = ""
             require("toggleterm").setup({
                 open_mapping = [[<c-t>]], -- can also use 2 c-t to open second terminal ect.
-                start_in_insert = true
+                terminal_mappings = true,
+                insert_mappings = true,
+                start_in_insert = true,
+                direction = "tab",
             })
         end
     },
@@ -170,7 +165,10 @@ require("lazy").setup({
         config = function()
             require("lualine").setup({
                 options = { 
-                    theme = "auto",
+                    -- theme = "auto",
+                    -- theme = "ayu_mirage",
+                    theme = "material",
+
                     component_separators = '',
                     section_separators = ''
                 },
@@ -189,10 +187,10 @@ require("lazy").setup({
        end,
     },
 
-    -- Highlight, edit, and navigate code
+    -- highlight, edit, and navigate code
     {
         "nvim-treesitter/nvim-treesitter",
-        build = ":TSUpdate",
+        build = ":tsupdate",
         config = function()
             require("nvim-treesitter.configs").setup {
                 ensure_installed = {
@@ -215,44 +213,44 @@ require("lazy").setup({
                 incremental_selection = {
                     enable = true,
                     keymaps = {
-                        init_selection = "<CR>",
-                        node_incremental = "<CR>",
-                        scope_incremental = "<S-CR>",
-                        node_decremental = "<BS>",
+                        init_selection = "<cr>",
+                        node_incremental = "<cr>",
+                        scope_incremental = "<s-cr>",
+                        node_decremental = "<bs>",
                     },
                 },
             }
         end
     },
 
-    -- BarBar
+    -- barbar
     {'romgrk/barbar.nvim',
          dependencies = {
-             'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
-             'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+             'lewis6991/gitsigns.nvim', -- optional: for git status
+             'nvim-tree/nvim-web-devicons', -- optional: for file icons
          },
          init = function() vim.g.barbar_auto_setup = false end,
          opts = {},
          version = '^1.0.0', -- optional: only update when a new 1.x version is released
      },
 
-    -- Markdown
+    -- markdown
     {
-        'MeanderingProgrammer/render-markdown.nvim',
+        'meanderingprogrammer/render-markdown.nvim',
         ft = "markdown",
         dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
         opts = {},
     },
 
 --  +----------------------------------------------------------+
---  |               Plugins with keymaps                       |
+--  |               plugins with keymaps                       |
 --  +----------------------------------------------------------+
 
-    -- leap -> LEADER + s
+    -- leap -> leader + s
     {
         "ggandor/leap.nvim",
         config = function()
-            vim.keymap.set({"n", "x"}, "<leader>s", "<Plug>(leap)", { desc = "Leap" })
+            vim.keymap.set({"n", "x"}, "<leader>s", "<plug>(leap)", { desc = "leap" })
         end
     },
     
@@ -272,63 +270,91 @@ require("lazy").setup({
                 function()
                     require("which-key").show({ global = false })
                 end,
-                desc = "Buffer Local Keymaps (which-key)",
+                desc = "buffer local keymaps (which-key)",
             },
         },
     },
 
-    -- file explorer -> LEADER + n
+    -- file explorer -> leader + n
+    ---@type LazySpec
     {
-        "echasnovski/mini.nvim",
-        version = false,
-        config = function()
-            local mini_files = require("mini.files")
-            mini_files.setup({
-                mappings = { 
-                    go_in_plus = 'l',
-                    go_in = 'L',
-                    go_out_plus = 'h',
-                    go_out = 'H',
-                    trim_left = '>',
-                    trim_right = '<',
-                }, 
-                options = {
-                    permanent_delete = false
-                },
-                --windows = {
-                --    preview = true,
-                --    width_preview = 40,
-                --}
-            })
-            vim.keymap.set("n", "<leader>n", mini_files.open, { desc = "Open File Explorer" })
-        end
+        "mikavilpas/yazi.nvim",
+        event = "VeryLazy",
+        dependencies = {
+            -- check the installation instructions at
+            -- https://github.com/folke/snacks.nvim
+            "folke/snacks.nvim"
+        },
+        keys = {
+            -- 👇 in this section, choose your own keymappings!
+            {
+                "<leader>n",
+                mode = { "n", "v" },
+                "<cmd>Yazi<cr>",
+                desc = "Open yazi at the current file",
+            },
+        },
+        ---@type YaziConfig | {}
+        opts = {
+            -- if you want to open yazi instead of netrw, see below for more info
+            open_for_directories = true,
+            keymaps = {
+                show_help = "<f1>",
+            },
+        },
+        -- 👇 if you use `open_for_directories=true`, this is recommended
+        init = function()
+            -- More details: https://github.com/mikavilpas/yazi.nvim/issues/802
+            -- vim.g.loaded_netrw = 1
+            vim.g.loaded_netrwPlugin = 1
+        end,
     },
-    
 
-    -- Harpoon -> LEADER + h
+    -- lazy git 
     {
-        "ThePrimeagen/harpoon",
+        "kdheepak/lazygit.nvim",
+        cmd = {
+            "LazyGit",
+            "LazyGitConfig",
+            "LazyGitCurrentFile",
+            "LazyGitFilter",
+            "LazyGitFilterCurrentFile",
+        },
+        -- optional for floating window border decoration
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+        },
+        -- setting the keybinding for LazyGit with 'keys' is recommended in
+        -- order to load the plugin when the command is run for the first time
+        keys = {
+            { "<leader>lg", "<cmd>LazyGit<cr>", desc = "Open lazy git" },
+        },
+    },
+
+    -- harpoon -> leader + h
+    {
+        "theprimeagen/harpoon",
         branch = "harpoon2",
         dependencies = { "nvim-lua/plenary.nvim" },
         config = function()
              local harpoon = require("harpoon")
              harpoon:setup()
-             -- Open Harpoon Dialog
+             -- open harpoon dialog
              vim.keymap.set("n", "<leader>h", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
 
-             -- Add/Remove 
-             vim.keymap.set("n", "<leader>ha", function() harpoon:list():add() end, { desc = "Harpoon Add"})
-             vim.keymap.set("n", "<leader>hd", function() harpoon:list():remove() end, { desc = "Harpoon Delete"})
+             -- add/remove 
+             vim.keymap.set("n", "<leader>ha", function() harpoon:list():add() end, { desc = "harpoon add"})
+             vim.keymap.set("n", "<leader>hd", function() harpoon:list():remove() end, { desc = "harpoon delete"})
 
-             -- Quickswap to marks
-             vim.keymap.set("n", "<leader>1", function() harpoon:list():select(1) end, { desc = "Harpoon to File 1" })
-             vim.keymap.set("n", "<leader>2", function() harpoon:list():select(2) end, { desc = "Harpoon to File 2" })
-             vim.keymap.set("n", "<leader>3", function() harpoon:list():select(3) end, { desc = "Harpoon to File 3" })
-             vim.keymap.set("n", "<leader>4", function() harpoon:list():select(4) end, { desc = "Harpoon to File 4" })
+             -- quickswap to marks
+             vim.keymap.set("n", "<leader>1", function() harpoon:list():select(1) end, { desc = "harpoon to file 1" })
+             vim.keymap.set("n", "<leader>2", function() harpoon:list():select(2) end, { desc = "harpoon to file 2" })
+             vim.keymap.set("n", "<leader>3", function() harpoon:list():select(3) end, { desc = "harpoon to file 3" })
+             vim.keymap.set("n", "<leader>4", function() harpoon:list():select(4) end, { desc = "harpoon to file 4" })
         end
     },
 
-    -- Telescope -> LEADER + f
+    -- telescope -> leader + f
     {
         "nvim-telescope/telescope.nvim",
         branch = "0.1.x",
@@ -344,9 +370,9 @@ require("lazy").setup({
                 defaults = {
                     mappings = {
                         i = {
-                            ["<C-k>"] = actions.move_selection_previous, -- move to prev result
-                            ["<C-j>"] = actions.move_selection_next, -- move to next result
-                            ["<C-q>"] = actions.smart_send_to_qflist, -- send entire list or selected to quickfix
+                            ["<c-k>"] = actions.move_selection_previous, -- move to prev result
+                            ["<c-j>"] = actions.move_selection_next, -- move to next result
+                            ["<c-q>"] = actions.smart_send_to_qflist, -- send entire list or selected to quickfix
                         }
                     },
                     path_display = function(opts, path)
@@ -355,15 +381,15 @@ require("lazy").setup({
                     end,
                 }
             })
-            vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find files in cwd" })
-            vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Live grep in cwd"})
-            vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Find buffers in cwd" })
-            vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Find through help" })
+            vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "find files in cwd" })
+            vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "live grep in cwd"})
+            vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "find buffers in cwd" })
+            vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "find through help" })
             vim.keymap.set("n", "<leader>fs",                       
                 function()              
                     builtin.grep_string({ search = vim.fn.expand("<cword>") })
                 end,
-                { desc = "Find string under cursor" })
+                { desc = "find string under cursor" })
         end
     },
 
@@ -386,9 +412,9 @@ require("lazy").setup({
             })
 
             dapui.setup {
-                -- Set icons to characters that are more likely to work in every terminal.
-                --    Feel free to remove or use ones that you like more! :)
-                --    Don't feel like these are good choices.
+                -- set icons to characters that are more likely to work in every terminal.
+                --    feel free to remove or use ones that you like more! :)
+                --    don't feel like these are good choices.
                 icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
                 controls = {
                     icons = {
@@ -415,22 +441,22 @@ require("lazy").setup({
                 {
                     type = "godot",
                     request = "launch",
-                    name = "Launch scene",
-                    project = "${workspaceFolder}",
+                    name = "launch scene",
+                    project = "${workspacefolder}",
                     launch_scene = true,
                 },
             }
-            --vim.api.nvim_create_user_command("Breakpoint", "lua require'dap'.toggle_breakpoint()", {})
-            --vim.api.nvim_create_user_command("Continue", "lua require'dap'.continue()", {})
-            --vim.api.nvim_create_user_command("StepOver", "lua require'dap'.step_over()", {})
-            --vim.api.nvim_create_user_command("StepInto", "lua require'dap'.step_into()", {})
-            --vim.api.nvim_create_user_command("REPL", "lua require'dap'.repl.open()", {})
-            vim.keymap.set('n', '<leader>gr', "<cmd>lua require'dap'.continue()<cr>", { desc = "Launch game or run until the next breakpoint" })
-            vim.keymap.set('n', '<leader>gb', "<cmd>lua require'dap'.toggle_breakpoint()<cr>", { desc = "Create or remove a breakpoint" })
-            vim.keymap.set('n', '<leader>go', "<cmd>lua require'dap'.step_over()<cr>", { desc = "Step over a line" })
-            vim.keymap.set('n', '<leader>gi', "<cmd>lua require'dap'.step_into()<cr>", { desc = "Step into a line" })
+            --vim.api.nvim_create_user_command("breakpoint", "lua require'dap'.toggle_breakpoint()", {})
+            --vim.api.nvim_create_user_command("continue", "lua require'dap'.continue()", {})
+            --vim.api.nvim_create_user_command("stepover", "lua require'dap'.step_over()", {})
+            --vim.api.nvim_create_user_command("stepinto", "lua require'dap'.step_into()", {})
+            --vim.api.nvim_create_user_command("repl", "lua require'dap'.repl.open()", {})
+            vim.keymap.set('n', '<leader>gr', "<cmd>lua require'dap'.continue()<cr>", { desc = "launch game or run until the next breakpoint" })
+            vim.keymap.set('n', '<leader>gb', "<cmd>lua require'dap'.toggle_breakpoint()<cr>", { desc = "create or remove a breakpoint" })
+            vim.keymap.set('n', '<leader>go', "<cmd>lua require'dap'.step_over()<cr>", { desc = "step over a line" })
+            vim.keymap.set('n', '<leader>gi', "<cmd>lua require'dap'.step_into()<cr>", { desc = "step into a line" })
             vim.keymap.set('n', '<leader>gu', dapui.toggle, {})
-            vim.keymap.set('n', '<leader>gs', "<cmd>lua require'dap'.disconnect()<cr>", { desc = "Stop dap session" })
+            vim.keymap.set('n', '<leader>gs', "<cmd>lua require'dap'.disconnect()<cr>", { desc = "stop dap session" })
 
             dap.listeners.after.event_initialized['dapui_config'] = dapui.open
             dap.listeners.before.event_terminated['dapui_config'] = dapui.close
@@ -439,14 +465,14 @@ require("lazy").setup({
     },
 
 --  +----------------------------------------------------------+
---  |                       LSP Setup                          |
+--  |                       lsp setup                          |
 --  +----------------------------------------------------------+
 -- https://lsp-zero.netlify.app/docs/getting-started.html
--- https://github.com/VonHeikemen/lsp-zero.nvim#quickstart-for-the-impatient
+-- https://github.com/vonheikemen/lsp-zero.nvim#quickstart-for-the-impatient
 
-    -- Plugins required for LSP Setup
+    -- plugins required for lsp setup
     -- https://lsp-zero.netlify.app/docs/getting-started.html
-    -- https://github.com/VonHeikemen/lsp-zero.nvim#quickstart-for-the-impatient
+    -- https://github.com/vonheikemen/lsp-zero.nvim#quickstart-for-the-impatient
     {'neovim/nvim-lspconfig'},
     {'hrsh7th/cmp-nvim-lsp'},
     {'hrsh7th/nvim-cmp'}, 
@@ -465,8 +491,6 @@ lspconfig_defaults.capabilities = vim.tbl_deep_extend(
 -- You'll find a list of language servers here:
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 -- Drop languages you want here
-require('lspconfig').rust_analyzer.setup{}
-require('lspconfig').pyright.setup{}
 require('lspconfig').rust_analyzer.setup({})
 require('lspconfig').pyright.setup({})
 require('lspconfig').gdscript.setup({
