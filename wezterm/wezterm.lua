@@ -9,7 +9,10 @@ config.font_size = 14
 config.window_decorations = "RESIZE" 
 config.enable_tab_bar = false
 config.window_close_confirmation = "NeverPrompt"
-config.default_prog = { "C:\\Program Files\\PowerShell\\7\\pwsh.exe" }
+
+if wezterm.target_triple:find("windows") then
+    config.default_prog = { "C:\\Program Files\\PowerShell\\7\\pwsh.exe" }
+end
 
 -- KeyBinds
 config.leader = { key = "w", mods = "ALT", timeout_milliseconds = 1000 }
