@@ -1,0 +1,113 @@
+{
+    "workbench.colorTheme": "Catppuccin Frappé",
+    "editor.fontFamily": "Iosevka Habamax",
+    "editor.fontLigatures": true,
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "vim.leader": "<space>",
+    "vim.useSystemClipboard": true,
+    "vim.hlsearch": false,
+    "vim.incsearch": true,
+    "vim.ignorecase": true,
+    "vim.smartcase": true,
+    "vim.autoindent": true,
+    "vim.useCtrlKeys": false,
+    "vim.insertModeKeyBindings": [],
+    "vim.normalModeKeyBindings": [
+        {
+            "before": ["<C-d>"],
+            "after": ["<C-d>", "z", "z"]
+        },
+        {
+            "before": ["<C-u>"],
+            "after": ["<C-u>", "z", "z"]
+        },
+        {
+            "before": ["n"],
+            "after": ["n", "z", "z", "z", "v"]
+        },
+        {
+            "before": ["N"],
+            "after": ["N", "z", "z", "z", "v"]
+        },
+        {
+            "before": ["leader", "w"],
+            "commands": ["workbench.action.files.save"]
+        },
+        {
+            "before": ["leader", "a"],
+            "commands": ["editor.action.selectAll"]
+        },
+        {
+            "before": ["leader", "v"],
+            "commands": ["editor.action.toggleWordWrap"]
+        },
+        {
+            "before": ["leader", "n"],
+            "commands": ["workbench.action.toggleSidebarVisibility"]
+        },
+        {
+            "before": ["<C-h>"],
+            "commands": ["workbench.action.focusLeftGroup"]
+        },
+        {
+            "before": ["<C-j>"],
+            "commands": ["workbench.action.focusBelowGroup"]
+        },
+        {
+            "before": ["<C-k>"],
+            "commands": ["workbench.action.focusAboveGroup"]
+        },
+        {
+            "before": ["<C-l>"],
+            "commands": ["workbench.action.focusRightGroup"]
+        },
+        {
+            "before": ["h"],
+            "commands": ["list.collapse"],
+            "when": "explorerViewletVisible && filesExplorerFocus"
+        },
+        {
+            "before": ["l"],
+            "commands": ["list.select"],
+            "when": "explorerViewletVisible && filesExplorerFocus"
+        },
+        {
+            "before": ["j"],
+            "commands": ["list.focusDown"],
+            "when": "explorerViewletVisible && filesExplorerFocus"
+        },
+        {
+            "before": ["k"],
+            "commands": ["list.focusUp"],
+            "when": "explorerViewletVisible && filesExplorerFocus"
+        }
+    ],
+    "vim.visualModeKeyBindings": [
+        {
+            "before": ["J"],
+            "commands": ["editor.action.moveLinesDownAction"]
+        },
+        {
+            "before": ["K"],
+            "commands": ["editor.action.moveLinesUpAction"]
+        },
+        {
+            "before": ["<"],
+            "after": ["<", "g", "v"]
+        },
+        {
+            "before": [">"],
+            "after": [">", "g", "v"]
+        }
+    ],
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "editor.lineNumbers": "relative",
+    "editor.wordWrap": "off",
+    "editor.scrollBeyondLastLine": false,
+    "editor.scrolloff": 7,
+    "editor.confirmDelete": true,
+    "editor.mouseWheelScrollSensitivity": 1,
+    "workbench.editor.enablePreview": false
+}
