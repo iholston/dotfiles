@@ -1,0 +1,60 @@
+" Basic settings equivalent to Neovim init.lua
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set autoindent
+set number
+set relativenumber
+set nowrap
+set nohlsearch
+set incsearch
+set ignorecase
+set splitbelow
+set splitright
+set signcolumn=yes
+set scrolloff=7
+set mouse=a
+set clipboard=unnamedplus
+set confirm
+
+" Leader key
+let mapleader = " "
+
+" Visual mode line movement
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+" Select all
+nnoremap <leader>a ggVG
+vnoremap <leader>a ggVG
+
+" Center cursor on page up/down and search
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Toggle wrap
+nnoremap <leader>v :set linebreak<CR>:set wrap!<CR>
+
+" Reselect after indenting
+vnoremap < <gv
+vnoremap > >gv
+
+" Quickfix list toggle
+nnoremap <leader>q :copen<CR>
+
+" Quickfix navigation
+nnoremap <C-n> :cnext<CR>zz
+nnoremap <C-p> :cprev<CR>zz
+
+" Save
+nnoremap <leader>w :write!<CR>
+
+" Pane navigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+set clipboard^=ideaput
