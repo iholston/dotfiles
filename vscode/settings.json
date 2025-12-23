@@ -43,7 +43,7 @@
         },
         {
             "before": ["leader", "n"],
-            "commands": ["workbench.action.toggleSidebarVisibility"]
+            "commands": ["workbench.view.explorer"]
         },
         {
             "before": ["<C-h>"],
@@ -60,26 +60,6 @@
         {
             "before": ["<C-l>"],
             "commands": ["workbench.action.focusRightGroup"]
-        },
-        {
-            "before": ["h"],
-            "commands": ["list.collapse"],
-            "when": "explorerViewletVisible && filesExplorerFocus"
-        },
-        {
-            "before": ["l"],
-            "commands": ["list.select"],
-            "when": "explorerViewletVisible && filesExplorerFocus"
-        },
-        {
-            "before": ["j"],
-            "commands": ["list.focusDown"],
-            "when": "explorerViewletVisible && filesExplorerFocus"
-        },
-        {
-            "before": ["k"],
-            "commands": ["list.focusUp"],
-            "when": "explorerViewletVisible && filesExplorerFocus"
         }
     ],
     "vim.visualModeKeyBindings": [
