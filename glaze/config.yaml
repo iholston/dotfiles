@@ -2,11 +2,11 @@ general:
   # Commands to run when the WM has started. This is useful for running a
   # script or launching another application.
   # Example: The below command launches Zebar.
-  startup_commands: ['shell-exec zebar']
+  startup_commands: []
 
   # Commands to run just before the WM is shutdown.
   # Example: The below command kills Zebar.
-  shutdown_commands: ['shell-exec taskkill /IM zebar.exe /F']
+  shutdown_commands: []
 
   # Commands to run after the WM config is reloaded.
   config_reload_commands: []
@@ -37,7 +37,7 @@ general:
   # effect if `hide_method: 'hide'`.
   # - 'true': Show all windows (regardless of workspace).
   # - 'false': Only show windows from the currently shown workspaces.
-  show_all_in_taskbar: false
+  show_all_in_taskbar: true
 
 gaps:
   # Whether to scale the gaps with the DPI of the monitor.
@@ -48,7 +48,7 @@ gaps:
 
   # Gap between windows and the screen edge.
   outer_gap:
-    top: '47px'
+    top: '7px'
     right: '7px'
     bottom: '7px'
     left: '7px'
@@ -111,25 +111,25 @@ window_behavior:
 
 workspaces:
   - name: '1'
-    bind_to_monitor: 0
+    bind_to_monitor: 1
   - name: '2'
-    bind_to_monitor: 0
+    bind_to_monitor: 1
   - name: '3'
-    bind_to_monitor: 0
+    bind_to_monitor: 1
   - name: '4'
-    bind_to_monitor: 0
+    bind_to_monitor: 1
   - name: '5'
-    bind_to_monitor: 0
+    bind_to_monitor: 1
   - name: '6'
-    bind_to_monitor: 1
+    bind_to_monitor: 0
   - name: '7'
-    bind_to_monitor: 1
+    bind_to_monitor: 0
   - name: '8'
-    bind_to_monitor: 1
+    bind_to_monitor: 0
   - name: '9'
-    bind_to_monitor: 1
+    bind_to_monitor: 0
   - name: '10'
-    bind_to_monitor: 1
+    bind_to_monitor: 0
 
 window_rules:
   - commands: ['ignore']
@@ -184,8 +184,8 @@ keybindings:
 
   # Disables window management and all other keybindings until alt+shift+p
   # is pressed again.
-  #- commands: ['wm-toggle-pause']
-  #  bindings: ['alt+shift+p']
+  - commands: ['wm-toggle-pause']
+    bindings: ['alt+shift+p']
 
   # Change tiling direction. This determines where new tiling windows will
   # be inserted.
@@ -278,4 +278,3 @@ keybindings:
     bindings: ['alt+shift+9']
   - commands: ['move --workspace 10', 'focus --workspace 10']
     bindings: ['alt+shift+0']
-
