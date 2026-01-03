@@ -10,12 +10,12 @@ vim.opt.shiftwidth      = 4     -- Number of spaces for auto-indentation, <<, >>
 vim.opt.expandtab       = true  -- Expand tabs into spaces
 vim.opt.autoindent      = true  -- Copy indent from current line when starting a new line
 
--- Buffer 
+-- Buffer
 vim.opt.number          = true  -- Show line numbers
 vim.opt.relativenumber  = true  -- Show relative line numbers
 vim.opt.wrap            = false -- Don't wrap lines
 
--- Search 
+-- Search
 vim.opt.hlsearch        = false -- Don't highlight all matches
 vim.opt.incsearch       = true  -- Highlights as you type
 vim.opt.ignorecase      = true  -- Ignores case
@@ -31,9 +31,9 @@ vim.opt.termguicolors   = true  -- Enables 24-bit RGB color in the TUIvertical
 
 -- Misc
 vim.opt.shell           = "pwsh.exe"
-vim.opt.mouse           = "a"  -- Allows the use of the mouse in all modes
+vim.opt.mouse           = "a"            -- Allows the use of the mouse in all modes
 vim.opt.clipboard       = "unnamedplus"  -- put yanks/pastes in system clipboard
-vim.opt.confirm         = true  -- Confirm before exiting with unsaved buffer(s)
+vim.opt.confirm         = true           -- Confirm before exiting with unsaved buffer(s)
 
 
 --  +----------------------------------------------------------+
@@ -48,7 +48,7 @@ vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 -- Select all
-vim.keymap.set({"n", "x"}, "<leader>a", "gg<S-v>G", { desc = "Select All" }) 
+vim.keymap.set({"n", "x"}, "<leader>a", "gg<S-v>G", { desc = "Select All" })
 
 -- Keep cursor center when paging up/down and searching
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
@@ -68,7 +68,7 @@ vim.keymap.set("v", ">", ">gv")
 
 -- Quickfix List
 vim.keymap.set("n", "<leader>q", -- toggles quickfix list
-    function() 
+    function()
         if vim.tbl_isempty(vim.fn.filter(vim.fn.getwininfo(), "v:val.quickfix")) then
             vim.cmd("copen")
         else
@@ -94,8 +94,6 @@ vim.keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>k")
 vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l")
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
 
-
-
 --  +----------------------------------------------------------+
 --  |             Plugins w/o keymaps                          |
 --  +----------------------------------------------------------+
@@ -116,31 +114,25 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
 
     -- colorscheme
-    --{
-    --    "ellisonleao/gruvbox.nvim",
-    --    priority = 1000,
-    --    config = function()
-    --        vim.cmd("colorscheme gruvbox")
-    --    end
-    --},
     {
         "mocte4/godotcolour-vim",
         config = function()
             vim.cmd("colorscheme godotcolour")
         end
     },
+
     -- gitsigns
     {
-       "lewis6991/gitsigns.nvim",
-       tag = "v0.9.0",
-       config = function()
-           require("gitsigns").setup()
-       end
+        "lewis6991/gitsigns.nvim",
+        tag = "v0.9.0",
+        config = function()
+            require("gitsigns").setup()
+        end
     },
 
     -- toggle term
     {
-        'akinsho/toggleterm.nvim', version = "*", 
+        'akinsho/toggleterm.nvim', version = "*",
         config = function()
             vim.opt.shell = vim.fn.executable "pwsh" and "pwsh" or "powershell"
             vim.opt.shellcmdflag = "-nologo -noprofile -executionpolicy remotesigned -command [console]::inputencoding=[console]::outputencoding=[system.text.encoding]::utf8;"
@@ -164,11 +156,8 @@ require("lazy").setup({
         dependencies = { "nvim-tree/nvim-web-devicons" },
         config = function()
             require("lualine").setup({
-                options = { 
-                    -- theme = "auto",
-                    -- theme = "ayu_mirage",
+                options = {
                     theme = "material",
-
                     component_separators = '',
                     section_separators = ''
                 },
@@ -180,7 +169,7 @@ require("lazy").setup({
                             file_status = true, -- displays file status (readonly status, modified status)
                             path = 0            -- 0 = just filename, 1 = relative path, 2 = absolute path
                         }
-                    }, 
+                    },
                     lualine_x = { "diagnostics", "diff" },
                 }
             })
@@ -190,26 +179,28 @@ require("lazy").setup({
     -- highlight, edit, and navigate code
     {
         "nvim-treesitter/nvim-treesitter",
-        build = ":tsupdate",
+        lazy = false, -- make sure it's there early on Windows
+        build = ":TSUpdate",
         config = function()
-            require("nvim-treesitter.configs").setup {
+            local ok, ts_configs = pcall(require, "nvim-treesitter.configs")
+            if not ok then
+                vim.notify("nvim-treesitter not available yet. Run :Lazy sync and restart.", vim.log.levels.WARN)
+                return
+            end
+
+            ts_configs.setup {
                 ensure_installed = {
-                    "gdscript",
-                    "godot_resource",
-                    "gdshader",
                     "bash",
                     "c",
                     "cpp",
-                    "latex",
+                    "java",
                     "lua",
                     "markdown",
                     "python",
                     "rust",
                 },
                 auto_install = true,
-                highlight = {
-                    enable = true
-                },
+                highlight = { enable = true },
                 incremental_selection = {
                     enable = true,
                     keymaps = {
@@ -253,7 +244,7 @@ require("lazy").setup({
             vim.keymap.set({"n", "x"}, "<leader>s", "<plug>(leap)", { desc = "leap" })
         end
     },
-    
+
     -- which-key
     {
         "folke/which-key.nvim",
@@ -310,7 +301,7 @@ require("lazy").setup({
         end,
     },
 
-    -- lazy git 
+    -- lazy git
     {
         "kdheepak/lazygit.nvim",
         cmd = {
@@ -342,7 +333,7 @@ require("lazy").setup({
              -- open harpoon dialog
              vim.keymap.set("n", "<leader>h", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
 
-             -- add/remove 
+             -- add/remove
              vim.keymap.set("n", "<leader>ha", function() harpoon:list():add() end, { desc = "harpoon add"})
              vim.keymap.set("n", "<leader>hd", function() harpoon:list():remove() end, { desc = "harpoon delete"})
 
@@ -358,7 +349,7 @@ require("lazy").setup({
     {
         "nvim-telescope/telescope.nvim",
         branch = "0.1.x",
-        dependencies = { 
+        dependencies = {
             "nvim-lua/plenary.nvim",
             { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
         },
@@ -385,169 +376,101 @@ require("lazy").setup({
             vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "live grep in cwd"})
             vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "find buffers in cwd" })
             vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "find through help" })
-            vim.keymap.set("n", "<leader>fs",                       
-                function()              
+            vim.keymap.set("n", "<leader>fs",
+                function()
                     builtin.grep_string({ search = vim.fn.expand("<cword>") })
                 end,
                 { desc = "find string under cursor" })
         end
     },
 
-    -- nvim dap
-    {
-        'mfussenegger/nvim-dap',
-        dependencies = {
-            'rcarriga/nvim-dap-ui',
-            'nvim-neotest/nvim-nio',
-            'williamboman/mason.nvim',
-            'jay-babu/mason-nvim-dap.nvim',
-        },
-        config = function()
-            local dap = require("dap")
-            local dapui = require("dapui")
-
-            require('mason-nvim-dap').setup({
-                automatic_setup = true,
-                handlers = {},
-            })
-
-            dapui.setup {
-                -- set icons to characters that are more likely to work in every terminal.
-                --    feel free to remove or use ones that you like more! :)
-                --    don't feel like these are good choices.
-                icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
-                controls = {
-                    icons = {
-                        pause = '⏸',
-                        play = '▶',
-                        step_into = '⏎',
-                        step_over = '⏭',
-                        step_out = '⏮',
-                        step_back = 'b',
-                        run_last = '▶▶',
-                        terminate = '⏹',
-                        disconnect = '⏏',
-                    },
-                },
-            }
-
-            dap.adapters.godot = {
-                type = "server",
-                host = "127.0.0.1",
-                port = 6006,
-            }
-
-            dap.configurations.gdscript = {
-                {
-                    type = "godot",
-                    request = "launch",
-                    name = "launch scene",
-                    project = "${workspacefolder}",
-                    launch_scene = true,
-                },
-            }
-            --vim.api.nvim_create_user_command("breakpoint", "lua require'dap'.toggle_breakpoint()", {})
-            --vim.api.nvim_create_user_command("continue", "lua require'dap'.continue()", {})
-            --vim.api.nvim_create_user_command("stepover", "lua require'dap'.step_over()", {})
-            --vim.api.nvim_create_user_command("stepinto", "lua require'dap'.step_into()", {})
-            --vim.api.nvim_create_user_command("repl", "lua require'dap'.repl.open()", {})
-            vim.keymap.set('n', '<leader>gr', "<cmd>lua require'dap'.continue()<cr>", { desc = "launch game or run until the next breakpoint" })
-            vim.keymap.set('n', '<leader>gb', "<cmd>lua require'dap'.toggle_breakpoint()<cr>", { desc = "create or remove a breakpoint" })
-            vim.keymap.set('n', '<leader>go', "<cmd>lua require'dap'.step_over()<cr>", { desc = "step over a line" })
-            vim.keymap.set('n', '<leader>gi', "<cmd>lua require'dap'.step_into()<cr>", { desc = "step into a line" })
-            vim.keymap.set('n', '<leader>gu', dapui.toggle, {})
-            vim.keymap.set('n', '<leader>gs', "<cmd>lua require'dap'.disconnect()<cr>", { desc = "stop dap session" })
-
-            dap.listeners.after.event_initialized['dapui_config'] = dapui.open
-            dap.listeners.before.event_terminated['dapui_config'] = dapui.close
-            dap.listeners.before.event_exited['dapui_config'] = dapui.close
-        end
-    },
-
 --  +----------------------------------------------------------+
 --  |                       lsp setup                          |
 --  +----------------------------------------------------------+
--- https://lsp-zero.netlify.app/docs/getting-started.html
--- https://github.com/vonheikemen/lsp-zero.nvim#quickstart-for-the-impatient
 
-    -- plugins required for lsp setup
-    -- https://lsp-zero.netlify.app/docs/getting-started.html
-    -- https://github.com/vonheikemen/lsp-zero.nvim#quickstart-for-the-impatient
-    {'neovim/nvim-lspconfig'},
-    {'hrsh7th/cmp-nvim-lsp'},
-    {'hrsh7th/nvim-cmp'}, 
+    { "neovim/nvim-lspconfig" },
+
+    { "williamboman/mason.nvim", config = true },
+    {
+        "williamboman/mason-lspconfig.nvim",
+        dependencies = { "williamboman/mason.nvim" },
+        config = function()
+            require("mason-lspconfig").setup({
+                ensure_installed = {
+                    "rust_analyzer",
+                    "pyright",
+                    "jdtls",
+                    "powershell_es",
+                },
+            })
+        end
+    },
+
+    { "hrsh7th/nvim-cmp" },
+    { "hrsh7th/cmp-nvim-lsp" },
 })
 
+--  +----------------------------------------------------------+
+--  |                    LSP (Neovim 0.11+)                    |
+--  +----------------------------------------------------------+
 
--- Add cmp_nvim_lsp capabilities settings to lspconfig
--- This should be executed before you configure any language server
-local lspconfig_defaults = require('lspconfig').util.default_config
-lspconfig_defaults.capabilities = vim.tbl_deep_extend(
-    'force',
-    lspconfig_defaults.capabilities,
-    require('cmp_nvim_lsp').default_capabilities()
-)
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
--- You'll find a list of language servers here:
--- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
--- Drop languages you want here
-require('lspconfig').rust_analyzer.setup({})
-require('lspconfig').pyright.setup({})
-require('lspconfig').gdscript.setup({
-    force_setup = true, -- because the LSP is global. Read more on lsp-zero docs about this.
-    single_file_support = false,
-    cmd = {'ncat', '127.0.0.1', '6005'}, -- the important trick for Windows!
-    root_dir = require('lspconfig.util').root_pattern('project.godot', '.git'),
-    filetypes = {'gd', 'gdscript', 'gdscript3' }
+vim.lsp.config("rust_analyzer", { capabilities = capabilities })
+vim.lsp.config("pyright",       { capabilities = capabilities })
+vim.lsp.config("jdtls",         { capabilities = capabilities })
+vim.lsp.config("powershell_es", { capabilities = capabilities })
+
+vim.lsp.enable({
+    "rust_analyzer",
+    "pyright",
+    "jdtls",
+    "powershell_es",
 })
 
--- Other, idk
-local cmp = require('cmp')
+--  +----------------------------------------------------------+
+--  |                       CMP setup                          |
+--  +----------------------------------------------------------+
+
+local cmp = require("cmp")
 cmp.setup({
     sources = {
-            {name = 'nvim_lsp'},
+        { name = "nvim_lsp" },
     },
     snippet = {
         expand = function(args)
-                -- You need Neovim v0.10 to use vim.snippet
-                vim.snippet.expand(args.body)
+            vim.snippet.expand(args.body)
         end,
     },
     mapping = cmp.mapping.preset.insert({
-        ['<CR>'] = cmp.mapping.confirm({select = false}),
-  }),
+        ["<CR>"] = cmp.mapping.confirm({ select = false }),
+    }),
 })
 
--- LSP Keymaps - if there is a language server active in the file
--- g + letter
+--  +----------------------------------------------------------+
+--  |                       LSP Keymaps                        |
+--  +----------------------------------------------------------+
+
 vim.api.nvim_create_autocmd('LspAttach', {
     desc = 'LSP actions',
     callback = function(event)
-        local opts = {buffer = event.buf}
-        -- Creates popup with info about whats under cursor
-        vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)              
-        -- Goto 
-        vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)        
-        vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)       
-        vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-        vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-        vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-        vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-        -- Rename across project
-        vim.keymap.set('n', 'gR', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-        -- LSP auto format file
-        vim.keymap.set({'n', 'x'}, 'gf', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-        -- Show availabe code actions
-        vim.keymap.set('n', 'ga', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+        local opts = { buffer = event.buf }
+
+        vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+
+        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+        vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+        vim.keymap.set('n', 'go', vim.lsp.buf.type_definition, opts)
+        vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+        vim.keymap.set('n', 'gs', vim.lsp.buf.signature_help, opts)
+
+        vim.keymap.set('n', 'gR', vim.lsp.buf.rename, opts)
+
+        vim.keymap.set({'n', 'x'}, 'gf', function()
+            vim.lsp.buf.format({ async = true })
+        end, opts)
+
+        vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, opts)
     end,
 })
-
--- godot setup
-if vim.fn.filereadable(vim.fn.getcwd() .. '/project.godot') == 1 then
-    local addr = './godot.pipe'
-    if vim.fn.has 'win32' == 1 then
-        addr = '127.0.0.1:6004'
-    end
-    vim.fn.serverstart(addr)
-end
-
