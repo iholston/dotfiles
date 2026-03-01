@@ -59,6 +59,10 @@ vim.keymap.set("n", "N", "Nzzzv")
 -- Toggle Wrap
 vim.keymap.set("n", "<leader>v", ":set linebreak<CR>:set wrap!<CR>", { desc = "Toggle Linewrap" })
 
+-- Buffer navigation
+vim.keymap.set("n", "<leader>bh", ":bprev<CR>", { desc = "Previous buffer" })
+vim.keymap.set("n", "<leader>bl", ":bnext<CR>", { desc = "Next buffer" })
+
 -- Reselecting when indenting multiple times
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
