@@ -27,3 +27,24 @@
   (when (and (ih-work-config-enabled-p)
              (file-readable-p work-config))
     (load work-config nil 'nomessage)))
+
+;;; Optional local Canvas overlay
+(defconst ih-canvas-config-directory
+  (file-name-as-directory
+   (expand-file-name
+    (or (getenv "DOOM_CANVAS_CONFIG_DIR") "~/.config/doom-canvas/")))
+  "Directory containing the optional local Canvas overlay.")
+
+(defun ih-canvas-config-enabled-p ()
+  "Return non-nil when the local Canvas overlay is explicitly enabled."
+  (member (downcase (or (getenv "DOOM_CANVAS_CONFIG") "0"))
+          '("1" "true" "yes" "on")))
+
+(let ((canvas-config (expand-file-name "config.el" ih-canvas-config-directory)))
+  (when (ih-canvas-config-enabled-p)
+    (if (file-readable-p canvas-config)
+        (load canvas-config nil 'nomessage)
+      (display-warning 'doom
+                       (format "Canvas overlay enabled but missing: %s"
+                               canvas-config)
+                       :error))))

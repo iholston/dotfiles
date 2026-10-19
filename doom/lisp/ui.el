@@ -89,9 +89,11 @@
 
 ;;; ─── Which-Key binding provenance ──────────────────────────────────────
 ;; Doom bindings retain their normal unmarked description. Public additions
-;; use a cyan [P] badge; the private overlay uses a magenta [W] badge.
+;; use a cyan [P] badge, work bindings use magenta [W], and Canvas-only
+;; bindings use green [C].
 (defconst config-which-key-public-prefix "[P] ")
 (defconst config-which-key-work-prefix "[W] ")
+(defconst config-which-key-canvas-prefix "[C] ")
 
 (defface config-which-key-public-face
   '((t (:inherit font-lock-function-name-face :weight semi-bold)))
@@ -103,13 +105,20 @@
   "Face for private work Which-Key descriptions."
   :group 'which-key)
 
+(defface config-which-key-canvas-face
+  '((t (:inherit font-lock-constant-face :weight bold)))
+  "Face for local Canvas Which-Key descriptions."
+  :group 'which-key)
+
 (defun config-which-key--origin-face (description)
   "Return the provenance face for unpropertized DESCRIPTION, or nil."
   (cond
    ((string-prefix-p config-which-key-public-prefix description)
     'config-which-key-public-face)
    ((string-prefix-p config-which-key-work-prefix description)
-    'config-which-key-work-face)))
+    'config-which-key-work-face)
+   ((string-prefix-p config-which-key-canvas-prefix description)
+    'config-which-key-canvas-face)))
 
 (defun config-which-key--style-origin-a (rendered)
   "Apply a provenance face to a Which-Key RENDERED description."
@@ -125,7 +134,7 @@
 
 (after! which-key
   ;; Which-Key's renderer is private API. If a future release removes it, keep
-  ;; the visible [P]/[W] badges and skip only the optional color treatment.
+  ;; the visible [P]/[W]/[C] badges and skip only the optional color treatment.
   (when (fboundp 'which-key--propertize-description)
     (advice-remove 'which-key--propertize-description
                    #'config-which-key--style-origin-a)

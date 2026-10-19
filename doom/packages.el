@@ -1,4 +1,4 @@
-;;; $DOOMDIR/packages.el -*- lexical-binding: t; no-byte-compile: t -*-
+;;; $DOOMDIR/packages.el -*- lexical-binding: t; no-byte-compile: t; -*-
 
 ;; Public-only package declarations. Doom pins transitive/module packages.
 
@@ -35,3 +35,17 @@
        (work-packages (expand-file-name "packages.el" work-directory)))
   (when (and work-enabled (file-readable-p work-packages))
     (load work-packages nil 'nomessage)))
+
+;;; Optional local Canvas packages
+(let* ((canvas-enabled
+        (member (downcase (or (getenv "DOOM_CANVAS_CONFIG") "0"))
+                '("1" "true" "yes" "on")))
+       (canvas-directory
+        (file-name-as-directory
+         (expand-file-name
+          (or (getenv "DOOM_CANVAS_CONFIG_DIR") "~/.config/doom-canvas/"))))
+       (canvas-packages (expand-file-name "packages.el" canvas-directory)))
+  (when canvas-enabled
+    (if (file-readable-p canvas-packages)
+        (load canvas-packages nil 'nomessage)
+      (error "Canvas package overlay enabled but missing: %s" canvas-packages))))

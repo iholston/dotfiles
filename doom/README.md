@@ -6,8 +6,8 @@ It contains no internal packages, hosts, URLs, usernames, or work paths.
 ## Files
 
 - `init.el` — enabled Doom modules.
-- `packages.el` — public package declarations plus the optional work-package loader.
-- `config.el` — ordered public module loads plus the optional work-config loader.
+- `packages.el` — public declarations plus optional overlay package loaders.
+- `config.el` — ordered public module loads plus optional overlay loaders.
 - `lisp/ui.el` — theme, fonts, modeline, and Which-Key provenance.
 - `lisp/platform.el` — executable paths and graphical/TTY platform behavior.
 - `lisp/tabs.el` — workspace-aware Centaur Tabs behavior and bindings.
@@ -24,7 +24,8 @@ Which-Key makes binding ownership explicit:
 
 - Unmarked descriptions are standard Doom/Emacs/package bindings.
 - Cyan `[P]` descriptions are public custom bindings from this directory.
-- Magenta `[W]` descriptions are private bindings supplied by the optional work overlay.
+- Magenta `[W]` descriptions are private bindings supplied by the work overlay.
+- Green `[C]` descriptions are machine-local bindings supplied by the Canvas overlay.
 
 The text badges remain readable in monochrome terminals.
 
@@ -47,48 +48,55 @@ agenda. The configuration does not create the directory automatically. Once
 the directory appears, the next agenda or todo-list invocation discovers its
 Org files without requiring an Emacs restart.
 
-## Optional work overlay
+## Optional overlays
 
-By default, the public config looks for two optional private entry points:
+The public core supports independent work and Canvas overlays:
 
 ```text
 ~/.config/doom-work/
-├── config.el      # runtime configuration
-└── packages.el    # package declarations
+├── config.el
+└── packages.el
+
+~/.config/doom-canvas/
+├── config.el
+└── packages.el
 ```
 
-Either file may be absent. The private overlay can keep supporting modules,
-scripts, or tests in any layout and load them from its own `config.el`; the
-public configuration does not depend on that internal structure.
-
-If that directory is absent, the public configuration loads normally without
-work functionality.
-
-Environment controls:
+The work overlay defaults to automatic discovery. Either work file may be
+absent; supporting modules, scripts, and tests can remain within that private
+directory.
 
 ```sh
 DOOM_WORK_CONFIG=0                 # force public-only mode
 DOOM_WORK_CONFIG=1                 # permit work overlay loading
-DOOM_WORK_CONFIG_DIR=/other/path   # use another private overlay path
+DOOM_WORK_CONFIG_DIR=/other/path   # use another work overlay path
 ```
 
-Unset `DOOM_WORK_CONFIG` means automatic mode: load the overlay only when its
-files exist.
+The Canvas overlay is explicitly opt-in so merely having local files does not
+change ordinary installations:
 
-Run `doom sync` after changing either public or work `packages.el`. Restart
-Emacs after package changes; ordinary config changes can use Doom reload.
+```sh
+DOOM_CANVAS_CONFIG=1
+DOOM_CANVAS_CONFIG_DIR="$HOME/.config/doom-canvas"
+```
+
+Run `doom sync` after changing any `packages.el`. Restart Emacs after package
+changes; ordinary config changes can use Doom reload.
 
 ## Installation
 
 This directory is a Doom user configuration, not a standalone Emacs
-configuration. Install Doom itself at `~/.emacs.d`, then link this directory as
-`~/.doom.d`:
+configuration. Install Doom itself, then link or set `DOOMDIR` to this
+directory and run `doom sync`.
+
+The primary installation uses the Emacs 32 Canvas app with an isolated Doom
+runtime under `~/.emacs32-canvas`; its environment sets:
 
 ```sh
-ln -s "$HOME/dotfiles/doom" "$HOME/.doom.d"
-"$HOME/.emacs.d/bin/doom" sync
+DOOMDIR="$HOME/dotfiles/doom"
+DOOM_CANVAS_CONFIG=1
+DOOM_CANVAS_CONFIG_DIR="$HOME/.config/doom-canvas"
 ```
 
-If `~/.doom.d` already exists, preserve or remove it before creating the link.
-Restart Emacs after the initial sync. The private work overlay is optional and
-is discovered automatically when present.
+This keeps the public directory as the single core source of truth while work
+and machine-local Canvas behavior remain outside Git.
