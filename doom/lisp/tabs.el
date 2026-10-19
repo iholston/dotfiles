@@ -333,9 +333,15 @@ seed from the current visual tabset when available."
 
 (defun +tabs-apply-theme-colors-h ()
   "Give Centaur's strip and inactive tabs clear Doom palette contrast."
-  (let ((bar-background (doom-color 'base0))
-        (inactive-background (doom-color 'base4))
-        (inactive-foreground (doom-color 'base7)))
+  (let ((bar-background (or (doom-color 'base0)
+                            (face-background 'default nil t)
+                            'unspecified))
+        (inactive-background (or (doom-color 'base4)
+                                 (face-background 'mode-line-inactive nil t)
+                                 'unspecified))
+        (inactive-foreground (or (doom-color 'base7)
+                                 (face-foreground 'mode-line-inactive nil t)
+                                 'unspecified)))
     (setq centaur-tabs-background-color bar-background
           centaur-tabs-style-left ""
           centaur-tabs-style-right ""
