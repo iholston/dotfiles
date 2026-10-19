@@ -93,7 +93,7 @@ The primary installation uses the Emacs 32 Canvas app with an isolated Doom
 runtime under `~/.emacs32-canvas`; its environment sets:
 
 ```sh
-DOOMDIR="$HOME/dotfiles/doom"
+DOOMDIR="$HOME/Code/dotfiles/doom"
 DOOM_CANVAS_CONFIG=1
 DOOM_CANVAS_CONFIG_DIR="$HOME/.config/doom-canvas"
 ```
